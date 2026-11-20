@@ -1,11 +1,16 @@
 import http from 'node:http';
 import fs from 'node:fs';
 import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 
-const PORT = 8088;
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const PORT = Number(process.env.PORT) || 3000;
 const HOST = '0.0.0.0';
-const ROOT_DIR = path.resolve('/home/ubuntu/ziwei-landing');
-const LOG_FILE = path.resolve('/home/ubuntu/ziwei-landing/logs/access.log');
+const ROOT_DIR = path.resolve(__dirname);
+const LOG_DIR = path.join(ROOT_DIR, 'logs');
+const LOG_FILE = path.join(LOG_DIR, 'access.log');
+
+fs.mkdirSync(LOG_DIR, { recursive: true });
 
 const MIME_TYPES = {
   '.html': 'text/html; charset=utf-8',
@@ -78,7 +83,13 @@ const server = http.createServer((req, res) => {
     res.statusCode = 200;
     res.setHeader('Content-Type', contentType);
     res.setHeader('Content-Length', stats.size);
-    res.setHeader('Cache-Control', 'public, max-age=3600');
+    if (ext === '.html') {
+      res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate');
+      res.setHeader('Pragma', 'no-cache');
+      res.setHeader('Expires', '0');
+    } else {
+      res.setHeader('Cache-Control', 'public, max-age=3600');
+    }
 
     if (req.method === 'HEAD') {
       res.end();
