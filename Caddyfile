@@ -1,0 +1,13 @@
+{
+	default_bind 10.0.0.173 127.0.0.1
+}
+
+tuvi.vietthy.click {
+	reverse_proxy 127.0.0.1:8088
+	log {
+		output file /home/ubuntu/ziwei-landing/logs/caddy-access.log {
+			roll_size 10mb
+			roll_keep 5
+		}
+	}
+}

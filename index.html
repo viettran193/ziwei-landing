@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tử Vi Thiên Kỷ — Lập lá số trong 1 phút &amp; Hỏi AI trực tiếp</title>
+  <meta name="description" content="Lập lá số Tử Vi chuẩn xác theo giờ mặt trời thực 63 tỉnh thành trong 1 phút. Nhận ngay ảnh lá số 12 cung, luận giải 13 chủ đề và hỏi đáp AI thông minh miễn phí mỗi ngày.">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Tử Vi Thiên Kỷ — Lập lá số trong 1 phút &amp; Hỏi AI trực tiếp">
+  <meta property="og:description" content="Lập lá số chuẩn xác theo 63 tỉnh/thành trong 1 phút. Xuất ảnh lá số 12 cung sắc nét + luận giải 13 chủ đề + hỏi AI ngay trên lá số của bạn.">
+  <meta property="og:url" content="https://tuvi.vietthy.click/">
+  <meta property="og:image" content="https://tuvi.vietthy.click/assets/hero.webp">
+  <link rel="icon" type="image/webp" href="assets/logo.webp">
+  <style>
+    :root {
+      --bg: #0b0717;
+      --card-bg: rgba(26, 19, 48, 0.7);
+      --card-border: rgba(168, 85, 247, 0.2);
+      --text: #f8fafc;
+      --text-muted: #94a3b8;
+      --accent-purple: #9333ea;
+      --accent-purple-light: #c084fc;
+      --accent-gold: #fbbf24;
+      --accent-gold-hover: #f59e0b;
+      --glow: rgba(147, 51, 234, 0.25);
+    }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      background-color: var(--bg);
+      background-image: 
+        radial-gradient(circle at 50% 0%, rgba(147, 51, 234, 0.15) 0%, transparent 60%),
+        radial-gradient(circle at 100% 40%, rgba(251, 191, 36, 0.08) 0%, transparent 50%);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      padding-bottom: 40px;
+    }
+    .container {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+    /* Header / Nav */
+    header {
+      padding: 24px 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      color: var(--text);
+    }
+    .brand-logo {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      border: 2px solid var(--accent-gold);
+      box-shadow: 0 0 16px var(--glow);
+    }
+    .brand-name {
+      font-size: 1.3rem;
+      font-weight: 700;
+      background: linear-gradient(135deg, #ffffff 40%, var(--accent-gold) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    /* Hero */
+    .hero {
+      text-align: center;
+      padding: 48px 0 32px;
+    }
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 14px;
+      background: rgba(147, 51, 234, 0.2);
+      border: 1px solid rgba(168, 85, 247, 0.4);
+      border-radius: 999px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--accent-gold);
+      margin-bottom: 20px;
+    }
+    .hero h1 {
+      font-size: 2.2rem;
+      font-weight: 800;
+      line-height: 1.25;
+      margin-bottom: 16px;
+      letter-spacing: -0.02em;
+    }
+    .hero h1 span.highlight {
+      background: linear-gradient(135deg, var(--accent-purple-light) 0%, var(--accent-gold) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .hero-subtitle {
+      font-size: 1.1rem;
+      color: var(--text-muted);
+      max-width: 620px;
+      margin: 0 auto 28px;
+    }
+    /* CTA Buttons */
+    .cta-group {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 14px;
+      margin-bottom: 36px;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 14px 26px;
+      border-radius: 12px;
+      font-size: 1rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.2s ease;
+      cursor: pointer;
+    }
+    .btn-primary {
+      background: linear-gradient(135deg, var(--accent-gold) 0%, var(--accent-gold-hover) 100%);
+      color: #1e112a;
+      box-shadow: 0 4px 20px rgba(251, 191, 36, 0.3);
+    }
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 24px rgba(251, 191, 36, 0.45);
+    }
+    .btn-secondary {
+      background: rgba(255, 255, 255, 0.08);
+      color: var(--text);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+    }
+    .btn-secondary:hover {
+      background: rgba(255, 255, 255, 0.14);
+      transform: translateY(-2px);
+    }
+    .hero-img-wrap {
+      max-width: 580px;
+      margin: 0 auto;
+      border-radius: 20px;
+      overflow: hidden;
+      border: 1px solid var(--card-border);
+      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.5), 0 0 24px var(--glow);
+    }
+    .hero-img-wrap img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+    /* Section styling */
+    section {
+      margin-top: 56px;
+    }
+    .section-title {
+      text-align: center;
+      font-size: 1.6rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+    .section-desc {
+      text-align: center;
+      color: var(--text-muted);
+      margin-bottom: 28px;
+      font-size: 0.95rem;
+    }
+    /* Feature cards */
+    .features-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 16px;
+    }
+    @media (min-width: 640px) {
+      .features-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 24px;
+      backdrop-filter: blur(10px);
+      transition: border-color 0.2s ease;
+    }
+    .card:hover {
+      border-color: rgba(168, 85, 247, 0.45);
+    }
+    .card-icon {
+      font-size: 2rem;
+      margin-bottom: 12px;
+      display: inline-block;
+    }
+    .card h3 {
+      font-size: 1.15rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+      color: #fff;
+    }
+    .card p {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+    /* Demo Section */
+    .demo-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 20px;
+    }
+    @media (min-width: 720px) {
+      .demo-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+    .chart-preview-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 16px;
+      text-align: center;
+    }
+    .chart-preview-card img {
+      width: 100%;
+      height: auto;
+      border-radius: 10px;
+      display: block;
+      margin-bottom: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    .chart-preview-caption {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+    /* Chat mockup */
+    .chat-mockup {
+      background: #140d28;
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+    .chat-mockup-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      padding-bottom: 12px;
+    }
+    .chat-mockup-avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: var(--accent-purple);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.9rem;
+    }
+    .chat-mockup-title {
+      font-size: 0.9rem;
+      font-weight: 600;
+    }
+    .chat-mockup-badge {
+      font-size: 0.72rem;
+      padding: 2px 8px;
+      background: rgba(34, 197, 94, 0.15);
+      border: 1px solid rgba(34, 197, 94, 0.4);
+      color: #4ade80;
+      border-radius: 999px;
+      margin-left: auto;
+    }
+    .msg {
+      max-width: 90%;
+      padding: 12px 14px;
+      border-radius: 14px;
+      font-size: 0.88rem;
+      line-height: 1.45;
+    }
+    .msg-user {
+      align-self: flex-end;
+      background: linear-gradient(135deg, var(--accent-purple) 0%, #7e22ce 100%);
+      color: #fff;
+      border-bottom-right-radius: 4px;
+    }
+    .msg-bot {
+      align-self: flex-start;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: #e2e8f0;
+      border-bottom-left-radius: 4px;
+    }
+    .msg-bot strong {
+      color: var(--accent-gold);
+    }
+    .msg-bot em {
+      color: var(--accent-purple-light);
+    }
+    /* Steps */
+    .steps-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 14px;
+    }
+    @media (min-width: 640px) {
+      .steps-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+    .step-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 20px;
+      position: relative;
+    }
+    .step-num {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: var(--accent-gold);
+      color: #1e112a;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 12px;
+    }
+    .step-card h4 {
+      font-size: 1rem;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+    .step-card p {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+    /* Corpus info */
+    .corpus-card {
+      background: linear-gradient(135deg, rgba(26, 19, 48, 0.8) 0%, rgba(45, 27, 85, 0.5) 100%);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 24px;
+      margin-top: 48px;
+    }
+    .corpus-card h3 {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--accent-gold);
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .corpus-card p {
+      font-size: 0.9rem;
+      color: #cbd5e1;
+      line-height: 1.6;
+    }
+    /* Footer */
+    footer {
+      margin-top: 56px;
+      padding-top: 28px;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      text-align: center;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      line-height: 1.7;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <a href="#" class="brand">
+        <img src="assets/logo.webp" alt="Logo Tử Vi Thiên Kỷ" class="brand-logo">
+        <span class="brand-name">Tử Vi Thiên Kỷ</span>
+      </a>
+      <a href="https://t.me/TuViThienKy_bot" class="btn btn-secondary" style="padding: 8px 16px; font-size: 0.88rem;">
+        Vào Bot
+      </a>
+    </header>
+
+    <main>
+      <!-- Hero -->
+      <section class="hero">
+        <div class="badge">
+          <span>✨</span> Trợ lý Tử Vi Đẩu Số thông minh thế hệ mới
+        </div>
+        <h1>
+          Lập lá số trong 1 phút — <br>
+          <span class="highlight">Hỏi AI ngay trên lá số của bạn</span>
+        </h1>
+        <p class="hero-subtitle">
+          Quy đổi Giờ Mặt Trời Thực chuẩn xác theo 63 tỉnh/thành Việt Nam. Luận giải chuyên sâu 13 chủ đề và giải đáp thắc mắc riêng bám sát từng cung vị.
+        </p>
+        <div class="cta-group">
+          <a href="https://t.me/TuViThienKy_bot" class="btn btn-primary" id="btn-open-bot">
+            🔮 Mở bot trên Telegram
+          </a>
+          <a href="https://t.me/+2KGku2WIJtowOWM1" class="btn btn-secondary" id="btn-community">
+            👥 Nhóm cộng đồng
+          </a>
+        </div>
+        <div class="hero-img-wrap">
+          <img src="assets/hero.webp" alt="Minh họa bot Tử Vi Thiên Kỷ">
+        </div>
+      </section>
+
+      <!-- 3 Features -->
+      <section>
+        <h2 class="section-title">Tính năng nổi bật</h2>
+        <p class="section-desc">Mọi tính năng hoàn toàn tự động, tiện lợi trực tiếp trên Telegram.</p>
+        <div class="features-grid">
+          <div class="card">
+            <span class="card-icon">🔮</span>
+            <h3>Lập lá số ~1 phút</h3>
+            <p>Hỗ trợ Dương lịch / Âm lịch (lịch VN 1900–2050). Tự động quy đổi Giờ Mặt Trời Thực theo 63 tỉnh/thành Việt Nam, bảo đảm độ chuẩn xác cao nhất của giờ sinh.</p>
+          </div>
+          <div class="card">
+            <span class="card-icon">🖼️</span>
+            <h3>Ảnh 12 cung + 13 chủ đề</h3>
+            <p>Xuất ảnh lá số 12 cung sắc nét, kèm kho luận giải chuẩn hóa cho 13 chủ đề cốt lõi: tổng quan, sự nghiệp, tài lộc, tình duyên, sức khoẻ, điền trạch...</p>
+          </div>
+          <div class="card">
+            <span class="card-icon">🤖</span>
+            <h3>Hỏi AI theo lá số của bạn</h3>
+            <p>3 câu miễn phí mỗi ngày. AI bám sát dữ liệu tinh bàn cá nhân chứ không nói chung chung. Nhận thêm +2 lượt hỏi dự trữ không giới hạn khi giới thiệu bạn bè.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Demo Section -->
+      <section>
+        <h2 class="section-title">Xem thử thực tế</h2>
+        <p class="section-desc">Trải nghiệm chất lượng kết xuất và phản hồi AI trên hồ sơ mẫu chuẩn.</p>
+        <div class="demo-grid">
+          <!-- Chart Preview -->
+          <div class="chart-preview-card">
+            <img src="assets/sample-chart.png" alt="Lá số mẫu 01/01/1990 giờ Tý nam Hà Nội">
+            <div class="chart-preview-caption">
+              Ảnh lá số kết xuất trực tiếp từ bot (Mẫu thử 1990 — Nam mạng Hà Nội)
+            </div>
+          </div>
+          <!-- QA Mockup -->
+          <div class="chat-mockup">
+            <div class="chat-mockup-header">
+              <div class="chat-mockup-avatar">🤖</div>
+              <div class="chat-mockup-title">Hỏi–Đáp AI Tử Vi</div>
+              <div class="chat-mockup-badge">Hỏi đáp thật trên lá số mẫu</div>
+            </div>
+            <div class="msg msg-user">
+              khi nào tôi giàu?
+            </div>
+            <div class="msg msg-bot">
+              Dựa trên lá số của bạn, tài vận không đến kiểu phất nhanh mà thiên về tích lũy dần và hậu vận mới rộng mở.<br><br>
+              <strong>Cung Tài Bạch Vô Chính Diệu</strong>, mượn Tử Vi – Tham Lang Hóa Quyền đối chiếu. Cổ tịch ghi nhận: <em>"ba mươi năm trước thành bại thất thường, ba mươi năm sau hoạnh phát"</em> — trước 30 tuổi dễ thăng trầm, sau tuổi 30 có cơ hội phát triển vượt bậc.<br><br>
+              Tóm lại: <strong>sau tuổi 30, đặc biệt vào trung niên trở đi</strong>, khi vị thế nghề nghiệp vững thì tài lộc của bạn mới thực sự khởi sắc và bền.
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 3 Steps -->
+      <section>
+        <h2 class="section-title">Bắt đầu chỉ với 3 bước</h2>
+        <p class="section-desc">Không cần cài app, không đăng ký tài khoản phức tạp.</p>
+        <div class="steps-grid">
+          <div class="step-card">
+            <div class="step-num">1</div>
+            <h4>Bấm "Mở bot"</h4>
+            <p>Khởi động cuộc trò chuyện với bot trên ứng dụng Telegram của bạn.</p>
+          </div>
+          <div class="step-card">
+            <div class="step-num">2</div>
+            <h4>Nhập ngày giờ sinh</h4>
+            <p>Chọn ngày sinh (Dương/Âm), giờ sinh và nơi sinh qua hướng dẫn từng bước.</p>
+          </div>
+          <div class="step-card">
+            <div class="step-num">3</div>
+            <h4>Nhận lá số &amp; Hỏi AI</h4>
+            <p>Xem ảnh lá số 12 cung, tra cứu 13 chủ đề và gõ /hoi để trò chuyện cùng AI.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Corpus Info -->
+      <section class="corpus-card">
+        <h3>📚 Dữ liệu &amp; Nền tảng học thuật</h3>
+        <p>
+          Hệ thống được vận hành trên kho dữ liệu gốc 56 GB cùng bộ luận giải Tử Vi Đẩu Số mã nguồn mở v4.0 của Vương Đa Ngư (王多鱼AI) — hơn 193.000 đoạn bao phủ 77 năm sinh (1930–2006) theo giấy phép CC BY 4.0, đã được hiệu đính tiếng Việt đầy đủ. Đồng thời đối chiếu chuẩn xác với nguồn cổ văn kinh điển và hệ thống kiến thức Thiên Kỷ của thầy Nghê Hải Hạ.
+        </p>
+      </section>
+    </main>
+
+    <footer>
+      <p>⚠️ Nội dung chỉ mang tính tham khảo, không thay tư vấn chuyên môn.</p>
+      <p>📚 紫微斗数开源解读数据集 v4.0 — 王多鱼AI · CC BY 4.0</p>
+    </footer>
+  </div>
+</body>
+</html>
