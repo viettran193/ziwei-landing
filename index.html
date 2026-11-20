@@ -55,6 +55,8 @@
       scroll-behavior: smooth;
       background-color: var(--paper);
       color: var(--ink);
+      overflow-x: hidden;
+      width: 100%;
     }
 
     body {
@@ -65,6 +67,9 @@
       color: var(--ink);
       -webkit-font-smoothing: antialiased;
       padding-top: 56px;
+      overflow-x: hidden;
+      width: 100%;
+      position: relative;
     }
 
     /* Container */
@@ -95,6 +100,7 @@
       align-items: center;
       justify-content: space-between;
       width: 100%;
+      gap: 10px;
     }
 
     .brand-wrap {
@@ -103,6 +109,8 @@
       gap: 12px;
       text-decoration: none;
       color: #fff;
+      min-width: 0;
+      flex-shrink: 1;
     }
 
     .brand-logo {
@@ -113,6 +121,14 @@
       border: 1.5px solid var(--accent-yellow);
       display: block;
       background: #fff;
+      flex-shrink: 0;
+    }
+
+    .brand-text-group {
+      display: flex;
+      align-items: baseline;
+      min-width: 0;
+      overflow: hidden;
     }
 
     .brand-text {
@@ -121,6 +137,9 @@
       font-size: 1.05rem;
       letter-spacing: -0.01em;
       color: #ffffff;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      overflow: hidden;
     }
 
     .brand-sub {
@@ -129,6 +148,7 @@
       color: rgba(255, 255, 255, 0.65);
       font-weight: 500;
       margin-left: 6px;
+      white-space: nowrap;
     }
 
     .header-btn {
@@ -138,6 +158,7 @@
       font-weight: 700;
       font-size: 0.85rem;
       padding: 7px 16px;
+      min-height: 40px;
       border-radius: var(--radius-btn);
       border: 1.5px solid #141413;
       box-shadow: 2px 2px 0 #000;
@@ -145,7 +166,10 @@
       transition: all 0.15s var(--ease-snap);
       display: inline-flex;
       align-items: center;
+      justify-content: center;
       gap: 4px;
+      flex-shrink: 0;
+      white-space: nowrap;
     }
 
     .header-btn:hover {
@@ -156,7 +180,12 @@
 
     /* Section Bar (Cobalt #5b3df5) */
     .section-bar-wrap {
-      width: 100%;
+      width: 100vw;
+      position: relative;
+      left: 50%;
+      right: 50%;
+      margin-left: -50vw;
+      margin-right: -50vw;
       background: var(--accent-cobalt);
       color: #ffffff;
       padding: 10px 0;
@@ -164,12 +193,14 @@
       margin-bottom: 24px;
       border-top: var(--border);
       border-bottom: var(--border);
+      box-sizing: border-box;
     }
 
     .section-bar-inner {
       display: flex;
       align-items: center;
       justify-content: space-between;
+      gap: 8px;
     }
 
     .section-bar-title {
@@ -182,12 +213,16 @@
       display: flex;
       align-items: center;
       gap: 8px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
 
     .section-bar-right {
       display: flex;
       align-items: center;
       gap: 12px;
+      flex-shrink: 0;
     }
 
     .section-pill-tag {
@@ -198,6 +233,7 @@
       background: rgba(255, 255, 255, 0.2);
       border-radius: var(--radius-pill);
       color: #fff;
+      white-space: nowrap;
     }
 
     .section-dot-btn {
@@ -212,6 +248,7 @@
       color: #fff;
       font-size: 0.7rem;
       font-family: var(--font-mono);
+      flex-shrink: 0;
     }
 
     /* Main Section Card */
@@ -222,6 +259,8 @@
       padding: 36px;
       box-shadow: 1px 1px 0 rgba(20, 20, 19, 0.06);
       position: relative;
+      width: 100%;
+      box-sizing: border-box;
     }
 
     /* Fig Tag */
@@ -240,16 +279,19 @@
       border-radius: var(--radius-pill);
       margin-bottom: 20px;
       border: 1px solid rgba(91, 61, 245, 0.2);
+      max-width: 100%;
+      line-height: 1.4;
     }
 
     /* Typography */
     h1.hero-h1 {
       font-family: var(--font-display);
       font-weight: 900;
-      font-size: clamp(2.2rem, 5vw, 3.5rem);
+      font-size: clamp(1.85rem, 5vw, 3.5rem);
       line-height: 1.15;
       letter-spacing: -0.025em;
       margin-bottom: 20px;
+      word-break: break-word;
     }
 
     .h1-line-1 {
@@ -266,6 +308,7 @@
       font-size: 1.12rem;
       line-height: 1.65;
       color: var(--ink-muted);
+      width: 100%;
       max-width: 820px;
       margin-bottom: 30px;
     }
@@ -277,6 +320,7 @@
       align-items: center;
       gap: 14px;
       margin-bottom: 36px;
+      width: 100%;
     }
 
     .btn {
@@ -288,11 +332,14 @@
       font-weight: 700;
       font-size: 0.98rem;
       padding: 12px 24px;
+      min-height: 44px;
       border-radius: var(--radius-btn);
       border: var(--border);
       text-decoration: none;
       cursor: pointer;
       transition: all 0.15s var(--ease-snap);
+      box-sizing: border-box;
+      text-align: center;
     }
 
     .btn-yellow {
@@ -338,6 +385,7 @@
       gap: 20px;
       padding-top: 28px;
       border-top: var(--border-light);
+      width: 100%;
     }
 
     .kpi-block {
@@ -345,6 +393,7 @@
       border: var(--border-thin);
       border-radius: 14px;
       padding: 18px 20px;
+      box-sizing: border-box;
     }
 
     .kpi-num {
@@ -371,6 +420,8 @@
       margin-bottom: 28px;
       border-bottom: var(--border-light);
       padding-bottom: 16px;
+      width: 100%;
+      -webkit-overflow-scrolling: touch;
     }
 
     .matrix-tab-btn {
@@ -378,6 +429,7 @@
       font-weight: 700;
       font-size: 0.95rem;
       padding: 10px 20px;
+      min-height: 44px;
       border-radius: var(--radius-btn);
       border: var(--border);
       background: #ffffff;
@@ -385,6 +437,11 @@
       cursor: pointer;
       box-shadow: 2px 2px 0 #141413;
       transition: all 0.15s var(--ease-snap);
+      white-space: nowrap;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      box-sizing: border-box;
     }
 
     .matrix-tab-btn.is-active {
@@ -395,6 +452,7 @@
 
     .tab-panel {
       display: none;
+      width: 100%;
     }
 
     .tab-panel.is-active {
@@ -407,6 +465,7 @@
       grid-template-columns: repeat(3, 1fr);
       gap: 16px;
       margin-bottom: 24px;
+      width: 100%;
     }
 
     .region-card {
@@ -414,6 +473,7 @@
       border-radius: 12px;
       padding: 14px 18px;
       background: var(--paper);
+      box-sizing: border-box;
     }
 
     .region-card.reg-bac { border-left: 5px solid var(--accent-cobalt); }
@@ -441,13 +501,16 @@
 
     .waffle-matrix-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(46px, 1fr));
+      grid-template-columns: repeat(auto-fill, minmax(44px, 1fr));
       gap: 6px;
       margin-bottom: 24px;
+      width: 100%;
     }
 
     .waffle-cell {
       aspect-ratio: 1;
+      min-width: 40px;
+      min-height: 40px;
       border-radius: 5px;
       border: 1px solid #141413;
       cursor: pointer;
@@ -462,6 +525,7 @@
       transition: all 0.15s var(--ease-snap);
       padding: 2px;
       text-align: center;
+      box-sizing: border-box;
     }
 
     .waffle-cell.cell-bac { background: var(--accent-cobalt); }
@@ -502,6 +566,8 @@
       justify-content: space-between;
       flex-wrap: wrap;
       gap: 10px;
+      width: 100%;
+      box-sizing: border-box;
     }
 
     /* Province Inspector Detail */
@@ -511,6 +577,8 @@
       border-radius: 14px;
       padding: 24px;
       box-shadow: var(--shadow-hard-sm);
+      width: 100%;
+      box-sizing: border-box;
     }
 
     .inspector-header {
@@ -520,6 +588,8 @@
       border-bottom: var(--border-light);
       padding-bottom: 12px;
       margin-bottom: 16px;
+      gap: 8px;
+      flex-wrap: wrap;
     }
 
     .inspector-kicker {
@@ -536,6 +606,7 @@
       font-size: 1.5rem;
       font-weight: 800;
       color: var(--ink);
+      word-break: break-word;
     }
 
     .inspector-specs-table {
@@ -552,7 +623,8 @@
       color: var(--ink-muted);
       padding: 8px 0;
       border-bottom: 1px dashed rgba(20, 20, 19, 0.12);
-      width: 38%;
+      width: 40%;
+      vertical-align: top;
     }
 
     .inspector-specs-table td {
@@ -560,6 +632,8 @@
       font-weight: 700;
       color: var(--ink);
       border-bottom: 1px dashed rgba(20, 20, 19, 0.12);
+      vertical-align: top;
+      word-break: break-word;
     }
 
     .inspector-callout {
@@ -570,6 +644,9 @@
       font-size: 0.88rem;
       color: var(--ink);
       line-height: 1.5;
+      width: 100%;
+      box-sizing: border-box;
+      word-break: break-word;
     }
 
     /* Tab 2: Vòng tinh bàn tương tác */
@@ -578,6 +655,14 @@
       grid-template-columns: 1.2fr 1fr;
       gap: 28px;
       align-items: start;
+      width: 100%;
+    }
+
+    .wheel-svg-wrap {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
     }
 
     #tinhban-wheel {
@@ -637,17 +722,23 @@
       grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
       gap: 10px;
       margin-bottom: 24px;
+      width: 100%;
     }
 
     .topic-btn-cell {
       border: var(--border-thin);
       border-radius: 10px;
       padding: 12px 14px;
+      min-height: 48px;
       background: #ffffff;
       text-align: left;
       cursor: pointer;
       transition: all 0.15s var(--ease-snap);
       box-shadow: 2px 2px 0 rgba(20, 20, 19, 0.08);
+      box-sizing: border-box;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
     }
 
     .topic-btn-cell:hover {
@@ -692,6 +783,8 @@
       border-top: var(--border-light);
       margin-top: 28px;
       padding-top: 12px;
+      width: 100%;
+      word-break: break-word;
     }
 
     /* Section 003: Demo / Proof */
@@ -699,6 +792,7 @@
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 28px;
+      width: 100%;
     }
 
     .proof-image-card {
@@ -707,6 +801,8 @@
       background: #ffffff;
       overflow: hidden;
       box-shadow: var(--shadow-hard-sm);
+      width: 100%;
+      box-sizing: border-box;
     }
 
     .proof-image-head {
@@ -715,18 +811,23 @@
       padding: 10px 16px;
       display: flex;
       justify-content: space-between;
+      align-items: center;
+      gap: 8px;
       font-family: var(--font-mono);
       font-size: 0.75rem;
       font-weight: 700;
       color: var(--ink-muted);
+      flex-wrap: wrap;
     }
 
     .proof-img {
       width: 100%;
+      max-width: 100%;
       height: auto;
       display: block;
       padding: 12px;
       background: #fff;
+      box-sizing: border-box;
     }
 
     .chat-proof-card {
@@ -736,6 +837,9 @@
       box-shadow: var(--shadow-hard-sm);
       display: flex;
       flex-direction: column;
+      width: 100%;
+      box-sizing: border-box;
+      min-width: 0;
     }
 
     .chat-tabs-bar {
@@ -745,13 +849,17 @@
       display: flex;
       gap: 6px;
       overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      width: 100%;
+      box-sizing: border-box;
     }
 
     .chat-qa-btn {
       font-family: var(--font-display);
       font-size: 0.8rem;
       font-weight: 700;
-      padding: 6px 14px;
+      padding: 8px 14px;
+      min-height: 40px;
       border-radius: var(--radius-btn);
       border: var(--border-thin);
       background: #ffffff;
@@ -759,6 +867,10 @@
       cursor: pointer;
       white-space: nowrap;
       transition: all 0.15s;
+      flex-shrink: 0;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
     }
 
     .chat-qa-btn.is-active {
@@ -773,6 +885,9 @@
       flex-direction: column;
       gap: 16px;
       flex: 1;
+      width: 100%;
+      box-sizing: border-box;
+      min-width: 0;
     }
 
     .chat-bubble {
@@ -780,13 +895,16 @@
       border-radius: 12px;
       font-size: 0.92rem;
       line-height: 1.55;
+      box-sizing: border-box;
+      word-break: break-word;
     }
 
     .chat-bubble-user {
       background: var(--paper);
       border: var(--border-thin);
       align-self: flex-start;
-      max-width: 90%;
+      max-width: 100%;
+      width: 100%;
     }
 
     .chat-bubble-user .bubble-tag {
@@ -820,6 +938,7 @@
       grid-template-columns: repeat(3, 1fr);
       gap: 20px;
       margin-bottom: 32px;
+      width: 100%;
     }
 
     .step-card {
@@ -828,6 +947,8 @@
       padding: 24px;
       background: #ffffff;
       box-shadow: var(--shadow-hard-sm);
+      box-sizing: border-box;
+      width: 100%;
     }
 
     .step-big-num {
@@ -843,6 +964,7 @@
       font-size: 1.15rem;
       font-weight: 800;
       margin-bottom: 8px;
+      word-break: break-word;
     }
 
     .step-card p {
@@ -859,6 +981,8 @@
       display: grid;
       grid-template-columns: 1.2fr 1fr;
       gap: 28px;
+      width: 100%;
+      box-sizing: border-box;
     }
 
     .corpus-prose p {
@@ -875,11 +999,13 @@
       flex-wrap: wrap;
       gap: 12px;
       margin-bottom: 24px;
+      width: 100%;
     }
 
     .faq-filter-group {
       display: flex;
       gap: 8px;
+      flex-wrap: wrap;
     }
 
     .faq-filter-btn {
@@ -887,11 +1013,17 @@
       font-size: 0.85rem;
       font-weight: 700;
       padding: 8px 16px;
+      min-height: 40px;
       border-radius: var(--radius-btn);
       border: var(--border-thin);
       background: #ffffff;
       cursor: pointer;
       transition: all 0.15s;
+      white-space: nowrap;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      box-sizing: border-box;
     }
 
     .faq-filter-btn.is-active {
@@ -904,6 +1036,7 @@
       flex-direction: column;
       gap: 12px;
       margin-bottom: 36px;
+      width: 100%;
     }
 
     .faq-item-card {
@@ -912,6 +1045,8 @@
       background: #ffffff;
       overflow: hidden;
       transition: all 0.15s;
+      width: 100%;
+      box-sizing: border-box;
     }
 
     .faq-item-card.is-open {
@@ -923,6 +1058,7 @@
       width: 100%;
       text-align: left;
       padding: 16px 20px;
+      min-height: 48px;
       background: transparent;
       border: none;
       font-family: inherit;
@@ -931,6 +1067,7 @@
       align-items: center;
       justify-content: space-between;
       gap: 16px;
+      box-sizing: border-box;
     }
 
     .faq-question-text {
@@ -938,6 +1075,8 @@
       font-size: 1rem;
       font-weight: 700;
       color: var(--ink);
+      line-height: 1.4;
+      word-break: break-word;
     }
 
     .faq-meta-badge {
@@ -946,6 +1085,7 @@
       font-weight: 700;
       color: var(--accent-cobalt);
       margin-right: 8px;
+      display: inline-block;
     }
 
     .faq-icon-box {
@@ -968,6 +1108,7 @@
       font-size: 0.92rem;
       color: var(--ink-muted);
       line-height: 1.6;
+      word-break: break-word;
     }
 
     .cta-closing-card {
@@ -982,6 +1123,8 @@
       gap: 24px;
       border: var(--border);
       box-shadow: var(--shadow-hard);
+      width: 100%;
+      box-sizing: border-box;
     }
 
     .cta-closing-card h2 {
@@ -990,6 +1133,7 @@
       font-size: 1.8rem;
       margin-bottom: 8px;
       color: #ffffff;
+      word-break: break-word;
     }
 
     .cta-closing-card p {
@@ -1005,6 +1149,7 @@
       padding: 32px 0;
       font-size: 0.88rem;
       color: var(--ink-muted);
+      width: 100%;
     }
 
     .footer-flex {
@@ -1013,20 +1158,37 @@
       align-items: flex-start;
       flex-wrap: wrap;
       gap: 20px;
+      width: 100%;
+    }
+
+    .footer-left {
+      max-width: 650px;
+      width: 100%;
     }
 
     .footer-left p {
       margin-bottom: 6px;
+      word-break: break-word;
+    }
+
+    .footer-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
     }
 
     .footer-links a {
       color: var(--ink);
       font-weight: 700;
       text-decoration: underline;
-      margin-left: 18px;
     }
 
-    /* Responsive */
+    /* =========================================================
+       RESPONSIVE BREAKPOINTS
+       - Breakpoint chính: <= 768px
+       - Breakpoint phụ: <= 480px
+       ========================================================= */
+
     @media (max-width: 900px) {
       .hero-kpis, .waffle-regions-summary, .steps-3-col {
         grid-template-columns: 1fr;
@@ -1038,6 +1200,291 @@
         padding: 24px 18px;
       }
     }
+
+    @media (max-width: 768px) {
+      .container {
+        padding: 0 16px;
+      }
+
+      .content-card {
+        padding: 22px 16px;
+        border-radius: 16px;
+      }
+
+      /* Header adjustments */
+      .brand-sub {
+        display: none;
+      }
+
+      .brand-text {
+        font-size: 0.95rem;
+      }
+
+      .header-btn {
+        padding: 6px 12px;
+        font-size: 0.8rem;
+      }
+
+      /* Section Bar */
+      .section-bar-title {
+        font-size: 0.82rem;
+        letter-spacing: 0.02em;
+      }
+
+      .section-pill-tag {
+        font-size: 0.7rem;
+        padding: 2px 8px;
+      }
+
+      /* Hero Buttons stacked full-width */
+      .btn-row {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 10px;
+      }
+
+      .btn-row .btn {
+        width: 100%;
+      }
+
+      /* Hero KPIs */
+      .hero-kpis {
+        grid-template-columns: 1fr;
+        gap: 12px;
+      }
+
+      .kpi-block {
+        padding: 14px 16px;
+      }
+
+      /* Section 002 Tabs horizontal scrollable on mobile */
+      .matrix-tabs {
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        padding-bottom: 12px;
+        margin-bottom: 20px;
+        gap: 8px;
+      }
+
+      .matrix-tab-btn {
+        font-size: 0.88rem;
+        padding: 8px 14px;
+        flex-shrink: 0;
+      }
+
+      /* Wheel responsive */
+      .wheel-container-card {
+        grid-template-columns: 1fr;
+        gap: 20px;
+      }
+
+      #tinhban-wheel {
+        max-width: 100%;
+      }
+
+      /* Waffle grid: automatic flex / grid fitting */
+      .waffle-matrix-grid {
+        grid-template-columns: repeat(auto-fill, minmax(40px, 1fr));
+        gap: 4px;
+      }
+
+      .waffle-cell {
+        min-width: 38px;
+        min-height: 38px;
+        font-size: 0.68rem;
+      }
+
+      .waffle-cell .cell-sub {
+        font-size: 0.55rem;
+      }
+
+      /* Topics grid */
+      .topics-waffle-grid {
+        grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+        gap: 8px;
+      }
+
+      /* Proof grid and Chat card */
+      .proof-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+      }
+
+      .chat-log-body {
+        padding: 14px;
+      }
+
+      /* Steps & Corpus */
+      .steps-3-col {
+        grid-template-columns: 1fr;
+        gap: 14px;
+      }
+
+      .corpus-card {
+        grid-template-columns: 1fr;
+        padding: 20px 16px;
+        gap: 20px;
+      }
+
+      /* FAQ Toolbar */
+      .faq-toolbar {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .faq-filter-group {
+        width: 100%;
+        overflow-x: auto;
+        flex-wrap: nowrap;
+        padding-bottom: 6px;
+      }
+
+      .faq-filter-btn {
+        flex-shrink: 0;
+      }
+
+      /* Closing CTA card */
+      .cta-closing-card {
+        padding: 24px 20px;
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .cta-closing-card .btn {
+        width: 100%;
+      }
+
+      /* Footer */
+      .footer-flex {
+        flex-direction: column;
+        gap: 16px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .container {
+        padding: 0 12px;
+      }
+
+      .content-card {
+        padding: 18px 12px;
+        border-radius: 14px;
+      }
+
+      /* Header tighter */
+      .brand-text {
+        font-size: 0.88rem;
+      }
+
+      .brand-logo {
+        width: 32px;
+        height: 32px;
+      }
+
+      .header-btn {
+        padding: 5px 10px;
+        font-size: 0.78rem;
+      }
+
+      /* Section Bar */
+      .section-bar-title {
+        font-size: 0.76rem;
+      }
+
+      .section-pill-tag {
+        font-size: 0.65rem;
+        padding: 2px 6px;
+      }
+
+      .section-dot-btn {
+        display: none;
+      }
+
+      /* Hero H1 clamp */
+      h1.hero-h1 {
+        font-size: clamp(1.6rem, 7.5vw, 2.2rem);
+        margin-bottom: 14px;
+      }
+
+      .hero-deck {
+        font-size: 0.98rem;
+        margin-bottom: 22px;
+      }
+
+      .fig-pill {
+        font-size: 0.68rem;
+        padding: 4px 10px;
+      }
+
+      /* Inspector inside cards */
+      .inspector-box {
+        padding: 16px 12px;
+      }
+
+      .inspector-name {
+        font-size: 1.25rem;
+      }
+
+      .inspector-specs-table {
+        font-size: 0.84rem;
+      }
+
+      .inspector-specs-table th {
+        width: 45%;
+      }
+
+      /* Waffle grid cells */
+      .waffle-matrix-grid {
+        grid-template-columns: repeat(auto-fill, minmax(36px, 1fr));
+        gap: 3px;
+      }
+
+      .waffle-cell {
+        min-width: 34px;
+        min-height: 34px;
+        font-size: 0.65rem;
+        padding: 1px;
+      }
+
+      .waffle-cell .cell-sub {
+        display: none; /* Hide small sub text on very small screens to avoid overflow */
+      }
+
+      /* Livebar */
+      .waffle-livebar {
+        padding: 10px 12px;
+        font-size: 0.78rem;
+      }
+
+      /* Region Summary cards */
+      .region-card {
+        padding: 10px 12px;
+      }
+
+      /* Topics Grid */
+      .topics-waffle-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 6px;
+      }
+
+      .topic-btn-cell {
+        padding: 10px 10px;
+      }
+
+      /* FAQ Trigger */
+      .faq-btn-trigger {
+        padding: 12px 14px;
+      }
+
+      .faq-question-text {
+        font-size: 0.92rem;
+      }
+
+      .faq-answer-panel {
+        padding: 0 14px 14px 14px;
+        font-size: 0.88rem;
+      }
+    }
   </style>
 </head>
 <body>
@@ -1047,7 +1494,7 @@
     <div class="container header-inner">
       <a href="#" class="brand-wrap">
         <img src="assets/logo.webp" alt="Tử Vi Thiên Kỷ" class="brand-logo" width="36" height="36">
-        <div>
+        <div class="brand-text-group">
           <span class="brand-text">Tử Vi Thiên Kỷ</span>
           <span class="brand-sub">— Almanac &amp; AI</span>
         </div>
@@ -1129,7 +1576,7 @@
       <h2 id="matrix-title" style="font-family:var(--font-display);font-weight:900;font-size:1.85rem;margin-bottom:8px;">
         Cấu trúc hệ thống qua biểu đồ ma trận đơn vị
       </h2>
-      <p style="color:var(--ink-muted);margin-bottom:24px;max-width:820px;">
+      <p style="color:var(--ink-muted);margin-bottom:24px;width:100%;max-width:820px;">
         Mỗi ô vuông đại diện cho 1 đơn vị thật trong bot: 63 tỉnh/thành hiệu chỉnh Giờ Mặt Trời Thực, 12 cung tinh bàn và 13 chủ đề luận giải chuyên sâu.
       </p>
 
@@ -1299,7 +1746,7 @@
       <h2 id="proof-title" style="font-family:var(--font-display);font-weight:900;font-size:1.85rem;margin-bottom:8px;">
         Xem trước ảnh lá số 12 cung &amp; nhật ký hỏi đáp AI
       </h2>
-      <p style="color:var(--ink-muted);margin-bottom:28px;max-width:820px;">
+      <p style="color:var(--ink-muted);margin-bottom:28px;width:100%;max-width:820px;">
         Hồ sơ mẫu sinh ngày 01/01/1990 lúc 00:30 tại Hà Nội (Giờ Tý). Dưới đây là ảnh kết xuất thực tế từ bot và câu trả lời AI bám sát cung vị.
       </p>
 
@@ -1363,7 +1810,7 @@
       <h2 id="steps-title" style="font-family:var(--font-display);font-weight:900;font-size:1.85rem;margin-bottom:8px;">
         Bắt đầu chỉ với 3 bước trên Telegram
       </h2>
-      <p style="color:var(--ink-muted);margin-bottom:28px;max-width:820px;">
+      <p style="color:var(--ink-muted);margin-bottom:28px;width:100%;max-width:820px;">
         Không cần cài ứng dụng, không đăng ký tài khoản rườm rà. 3 câu hỏi AI miễn phí mỗi ngày; mời bạn bè thành công +2 lượt dự trữ, cộng dồn không hết hạn.
       </p>
 
@@ -1446,7 +1893,7 @@
       <h2 id="faq-title" style="font-family:var(--font-display);font-weight:900;font-size:1.85rem;margin-bottom:8px;">
         Giải đáp về độ chính xác dữ liệu &amp; giới hạn AI
       </h2>
-      <p style="color:var(--ink-muted);margin-bottom:24px;max-width:820px;">
+      <p style="color:var(--ink-muted);margin-bottom:24px;width:100%;max-width:820px;">
         Những thắc mắc phổ biến nhất về cách tính Giờ Mặt Trời Thực, lịch Âm–Dương Việt Nam, cơ chế đối chiếu tinh bàn và phạm vi tư vấn của trợ lý AI.
       </p>
 
