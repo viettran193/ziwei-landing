@@ -1189,6 +1189,184 @@
        - Breakpoint phụ: <= 480px
        ========================================================= */
 
+    
+    /* Unit Matrix Dynamic Styles */
+    .matrix-mode-toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 20px;
+      padding: 12px 16px;
+      background: var(--paper);
+      border: var(--border-thin);
+      border-radius: 12px;
+      box-sizing: border-box;
+      width: 100%;
+    }
+
+    .matrix-mode-label {
+      font-family: var(--font-mono);
+      font-weight: 700;
+      font-size: 0.84rem;
+      color: var(--ink-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .matrix-mode-btns {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .matrix-mode-btn {
+      font-family: var(--font-mono);
+      font-size: 0.84rem;
+      font-weight: 700;
+      padding: 8px 16px;
+      min-height: 40px;
+      border-radius: var(--radius-btn);
+      border: var(--border-thin);
+      background: #ffffff;
+      color: var(--ink);
+      cursor: pointer;
+      transition: all 0.15s var(--ease-snap);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      box-sizing: border-box;
+    }
+
+    .matrix-mode-btn:hover {
+      background: #f5f5f4;
+      border-color: var(--ink);
+    }
+
+    .matrix-mode-btn.is-active {
+      background: var(--paper-dark);
+      color: #ffffff;
+      border-color: var(--paper-dark);
+      box-shadow: 2px 2px 0 var(--accent-cobalt);
+    }
+
+    .matrix-groups-wrap {
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+      margin-bottom: 24px;
+      width: 100%;
+      box-sizing: border-box;
+    }
+
+    .matrix-group-block {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      width: 100%;
+    }
+
+    .matrix-group-header {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--ink);
+    }
+
+    .matrix-group-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+      border: 1px solid rgba(0, 0, 0, 0.2);
+    }
+
+    .matrix-group-cells {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      width: 100%;
+    }
+
+    /* Cell Colors for Groups */
+    .waffle-cell.cell-offset-g1 { background: #c83e2b; color: #ffffff; }
+    .waffle-cell.cell-offset-g2 { background: #f2b705; color: #141413; }
+    .waffle-cell.cell-offset-g3 { background: #8a8f98; color: #ffffff; }
+    .waffle-cell.cell-offset-g4 { background: #1d4ed8; color: #ffffff; }
+
+    .waffle-cell.cell-reg-bac { background: #5b3df5; color: #ffffff; }
+    .waffle-cell.cell-reg-trung { background: #c83e2b; color: #ffffff; }
+    .waffle-cell.cell-reg-nam { background: #141413; color: #ffffff; }
+
+    .waffle-cell.cell-all { background: #2b2b28; color: #ffffff; }
+
+    /* Summary Table */
+    .matrix-summary-table-wrap {
+      background: var(--paper);
+      border: var(--border-thin);
+      border-radius: 12px;
+      overflow: hidden;
+      margin-bottom: 24px;
+      width: 100%;
+      box-sizing: border-box;
+    }
+
+    .matrix-summary-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-family: var(--font-sans);
+      font-size: 0.88rem;
+    }
+
+    .matrix-summary-table th {
+      background: rgba(20, 20, 19, 0.04);
+      padding: 10px 16px;
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: var(--ink-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      border-bottom: var(--border-thin);
+    }
+
+    .matrix-summary-table td {
+      padding: 11px 16px;
+      border-bottom: 1px solid rgba(20, 20, 19, 0.08);
+      color: var(--ink);
+    }
+
+    .matrix-summary-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    .matrix-summary-table tr.summary-total-row td {
+      font-weight: 700;
+      background: rgba(20, 20, 19, 0.02);
+      border-top: var(--border-thin);
+    }
+
+    .table-group-cell {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .table-group-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+      border: 1px solid rgba(0, 0, 0, 0.2);
+    }
+
     @media (max-width: 900px) {
       .hero-kpis, .waffle-regions-summary, .steps-3-col {
         grid-template-columns: 1fr;
@@ -1202,6 +1380,19 @@
     }
 
     @media (max-width: 768px) {
+      .matrix-mode-toolbar {
+        flex-direction: column;
+        align-items: stretch;
+      }
+      .matrix-mode-btns {
+        width: 100%;
+      }
+      .matrix-mode-btn {
+        flex: 1 1 auto;
+        padding: 8px 12px;
+        font-size: 0.8rem;
+      }
+
       .container {
         padding: 0 16px;
       }
@@ -1362,6 +1553,30 @@
     }
 
     @media (max-width: 480px) {
+      .matrix-mode-btn {
+        font-size: 0.76rem;
+        padding: 6px 10px;
+        min-height: 40px;
+      }
+      .matrix-group-cells {
+        gap: 4px;
+      }
+      .waffle-cell {
+        width: 36px;
+        height: 36px;
+        flex: 0 0 36px;
+        font-size: 0.65rem;
+        padding: 1px;
+      }
+      .waffle-cell .cell-sub {
+        display: none;
+      }
+      .matrix-summary-table th,
+      .matrix-summary-table td {
+        padding: 8px 12px;
+        font-size: 0.82rem;
+      }
+
       .container {
         padding: 0 12px;
       }
@@ -1595,31 +1810,40 @@
 
       <!-- Tab 1: 63 Tỉnh Thành -->
       <div class="tab-panel is-active" id="panel-63" role="tabpanel" aria-labelledby="tab-btn-63">
-        <div class="waffle-regions-summary">
-          <div class="region-card reg-bac">
-            <div class="region-badge-title">
-              <span>Bắc Bộ</span>
-              <span>25 (39.7%)</span>
-            </div>
-            <div class="region-count-desc">25 tỉnh/thành · Ô màu tím cobalt</div>
-          </div>
-          <div class="region-card reg-trung">
-            <div class="region-badge-title">
-              <span>Trung Bộ &amp; Tây Nguyên</span>
-              <span>19 (30.2%)</span>
-            </div>
-            <div class="region-count-desc">19 tỉnh/thành · Ô màu đỏ vermilion</div>
-          </div>
-          <div class="region-card reg-nam">
-            <div class="region-badge-title">
-              <span>Nam Bộ</span>
-              <span>19 (30.2%)</span>
-            </div>
-            <div class="region-count-desc">19 tỉnh/thành · Ô màu mực đen</div>
+        <!-- Hàng nút chuyển nhóm ma trận -->
+        <div class="matrix-mode-toolbar">
+          <span class="matrix-mode-label">Phân nhóm:</span>
+          <div class="matrix-mode-btns" role="tablist" aria-label="Chế độ phân nhóm ma trận 63 tỉnh thành">
+            <button type="button" class="matrix-mode-btn is-active" id="mode-btn-offset" data-group-mode="offset" role="tab" aria-selected="true">
+              Theo độ lệch giờ
+            </button>
+            <button type="button" class="matrix-mode-btn" id="mode-btn-region" data-group-mode="region" role="tab" aria-selected="false">
+              Theo vùng
+            </button>
+            <button type="button" class="matrix-mode-btn" id="mode-btn-all" data-group-mode="all" role="tab" aria-selected="false">
+              Tất cả
+            </button>
           </div>
         </div>
 
-        <div class="waffle-matrix-grid" id="waffle-grid-63" role="grid" aria-label="Ma trận 63 tỉnh thành"></div>
+        <!-- Khối chứa ma trận 63 ô động -->
+        <div class="matrix-groups-wrap" id="waffle-grid-63" role="grid" aria-label="Ma trận 63 tỉnh thành tự sắp xếp"></div>
+
+        <!-- Bảng tóm tắt dưới ma trận -->
+        <div class="matrix-summary-table-wrap">
+          <table class="matrix-summary-table">
+            <thead>
+              <tr>
+                <th style="text-align:left;">Nhóm phân loại</th>
+                <th style="text-align:right;">Số tỉnh/thành</th>
+                <th style="text-align:right;">Tỷ lệ (%)</th>
+              </tr>
+            </thead>
+            <tbody id="matrix-summary-tbody">
+              <!-- Render động theo chế độ đang chọn -->
+            </tbody>
+          </table>
+        </div>
 
         <div class="waffle-livebar">
           <span>Tổng quan: Di chuột hoặc chạm vào từng ô vuông để xem tên đơn vị tương ứng.</span>
@@ -2141,9 +2365,14 @@ const QA_SAMPLES = [
         });
       });
 
-      // 2. Setup 63 Provinces Waffle
+      // 2. Setup 63 Provinces Waffle Matrix (Dynamic Rearranging with FLIP Animation)
       const waffle63 = document.getElementById('waffle-grid-63');
+      const summaryTbody = document.getElementById('matrix-summary-tbody');
+      const modeBtns = document.querySelectorAll('[data-group-mode]');
       let selectedProvinceIdx = 24; // Default: Ha Noi
+      let currentGroupMode = 'offset'; // Default mode per brief: "Theo độ lệch giờ"
+      let isMatrixInitialized = false;
+      let flipTimeout = null;
 
       function formatOffset(offset) {
         if (offset === 0) return '0 phút (trùng múi giờ UTC+7)';
@@ -2166,29 +2395,101 @@ const QA_SAMPLES = [
         return `Tại ${name} (${offset > 0 ? '+' : ''}${offset} phút), đồng hồ chỉ 22:50 tương ứng ${timeStr} Giờ Mặt Trời Thực — ${canhanh}.`;
       }
 
-      function renderProvinces() {
-        waffle63.innerHTML = '';
-        PROVINCES.forEach((p, idx) => {
-          const btn = document.createElement('button');
-          btn.type = 'button';
-          let regClass = 'cell-bac';
-          if (p.region === 'Trung Bộ' || p.region === 'Tây Nguyên') {
-            regClass = 'cell-trung';
-          } else if (p.region === 'Nam Bộ') {
-            regClass = 'cell-nam';
+      // Group definitions
+      const GROUP_MODES = {
+        offset: [
+          {
+            id: 'off-g1',
+            name: 'Sớm hẳn (≥ +8 phút)',
+            color: '#c83e2b',
+            colorClass: 'cell-offset-g1',
+            filter: p => p.offset >= 8,
+            sort: (a, b) => b.offset - a.offset
+          },
+          {
+            id: 'off-g2',
+            name: 'Sớm (+3 đến +7 phút)',
+            color: '#f2b705',
+            colorClass: 'cell-offset-g2',
+            filter: p => p.offset >= 3 && p.offset <= 7,
+            sort: (a, b) => b.offset - a.offset
+          },
+          {
+            id: 'off-g3',
+            name: 'Gần trùng giờ chuẩn (−2 đến +2 phút)',
+            color: '#8a8f98',
+            colorClass: 'cell-offset-g3',
+            filter: p => p.offset >= -2 && p.offset <= 2,
+            sort: (a, b) => b.offset - a.offset
+          },
+          {
+            id: 'off-g4',
+            name: 'Muộn (≤ −3 phút)',
+            color: '#1d4ed8',
+            colorClass: 'cell-offset-g4',
+            filter: p => p.offset <= -3,
+            sort: (a, b) => b.offset - a.offset
           }
-          btn.className = `waffle-cell ${regClass}`;
-          if (idx === selectedProvinceIdx) btn.classList.add('is-selected');
-          btn.setAttribute('aria-label', `${p.name}, ${p.region}, ${formatOffset(p.offset)}`);
-          btn.innerHTML = `<span>${p.code === 'HG2' ? 'HGi' : p.code}</span><span class="cell-sub">${p.offset > 0 ? '+' : ''}${p.offset}p</span>`;
-          
-          btn.addEventListener('click', () => {
-            selectedProvinceIdx = idx;
-            updateProvinceInspector();
-            renderProvinces();
-          });
-          waffle63.appendChild(btn);
+        ],
+        region: [
+          {
+            id: 'reg-bac',
+            name: 'Bắc Bộ',
+            color: '#5b3df5',
+            colorClass: 'cell-reg-bac',
+            filter: p => p.region === 'Bắc Bộ',
+            sort: null // keep dataset order
+          },
+          {
+            id: 'reg-trung',
+            name: 'Trung Bộ & Tây Nguyên',
+            color: '#c83e2b',
+            colorClass: 'cell-reg-trung',
+            filter: p => p.region === 'Trung Bộ' || p.region === 'Tây Nguyên',
+            sort: null // keep dataset order
+          },
+          {
+            id: 'reg-nam',
+            name: 'Nam Bộ',
+            color: '#141413',
+            colorClass: 'cell-reg-nam',
+            filter: p => p.region === 'Nam Bộ',
+            sort: null // keep dataset order
+          }
+        ],
+        all: [
+          {
+            id: 'all-63',
+            name: 'Toàn bộ 63 tỉnh/thành',
+            color: '#2b2b28',
+            colorClass: 'cell-all',
+            filter: () => true,
+            sort: null // keep dataset order
+          }
+        ]
+      };
+
+      // Create the single set of 63 cell DOM elements (no duplication across views)
+      const provinceCells = PROVINCES.map((p, idx) => {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'waffle-cell';
+        btn.dataset.idx = String(idx);
+        btn.setAttribute('aria-label', `${p.name}, ${p.region}, ${formatOffset(p.offset)}`);
+        btn.innerHTML = `<span>${p.code === 'HG2' ? 'HGi' : p.code}</span><span class="cell-sub">${p.offset > 0 ? '+' : ''}${p.offset}p</span>`;
+
+        btn.addEventListener('click', () => {
+          selectProvince(idx);
         });
+        return btn;
+      });
+
+      function selectProvince(idx) {
+        selectedProvinceIdx = idx;
+        provinceCells.forEach((c, i) => {
+          c.classList.toggle('is-selected', i === idx);
+        });
+        updateProvinceInspector();
       }
 
       function updateProvinceInspector() {
@@ -2201,6 +2502,167 @@ const QA_SAMPLES = [
         document.getElementById('prov-offset').textContent = formatOffset(p.offset);
         document.getElementById('prov-example').textContent = formatBoundaryExample(p.name, p.offset);
       }
+
+      function renderSummaryTable(mode, groups) {
+        summaryTbody.innerHTML = '';
+        if (mode === 'all') {
+          const tr = document.createElement('tr');
+          tr.innerHTML = `
+            <td>
+              <div class="table-group-cell">
+                <span class="table-group-dot" style="background:#2b2b28;"></span>
+                <strong>Toàn bộ 63 tỉnh/thành</strong>
+              </div>
+            </td>
+            <td style="text-align:right;font-family:var(--font-mono);font-weight:700;">63</td>
+            <td style="text-align:right;font-family:var(--font-mono);font-weight:700;">100.0%</td>
+          `;
+          summaryTbody.appendChild(tr);
+          return;
+        }
+
+        let totalCount = 0;
+        groups.forEach(g => {
+          const count = PROVINCES.filter(g.filter).length;
+          totalCount += count;
+          const pct = ((count / 63) * 100).toFixed(1);
+          const tr = document.createElement('tr');
+          tr.innerHTML = `
+            <td>
+              <div class="table-group-cell">
+                <span class="table-group-dot" style="background:${g.color};"></span>
+                <span>${g.name}</span>
+              </div>
+            </td>
+            <td style="text-align:right;font-family:var(--font-mono);font-weight:700;">${count}</td>
+            <td style="text-align:right;font-family:var(--font-mono);">${pct}%</td>
+          `;
+          summaryTbody.appendChild(tr);
+        });
+
+        // Total row
+        const totalTr = document.createElement('tr');
+        totalTr.className = 'summary-total-row';
+        totalTr.innerHTML = `
+          <td><strong>Tổng cộng</strong></td>
+          <td style="text-align:right;font-family:var(--font-mono);">${totalCount}</td>
+          <td style="text-align:right;font-family:var(--font-mono);">100.0%</td>
+        `;
+        summaryTbody.appendChild(totalTr);
+      }
+
+      function renderMatrixWithFLIP(targetMode) {
+        const isReducedMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        
+        // 1. FIRST: Measure current cell positions if animating
+        const firstRects = new Map();
+        if (!isReducedMotion && isMatrixInitialized) {
+          if (flipTimeout) {
+            clearTimeout(flipTimeout);
+            flipTimeout = null;
+          }
+          provinceCells.forEach(cell => {
+            firstRects.set(cell, cell.getBoundingClientRect());
+          });
+        }
+
+        // 2. DOM REARRANGEMENT
+        currentGroupMode = targetMode;
+
+        // Update mode buttons
+        modeBtns.forEach(btn => {
+          const isActive = btn.getAttribute('data-group-mode') === targetMode;
+          btn.classList.toggle('is-active', isActive);
+          btn.setAttribute('aria-selected', isActive ? 'true' : 'false');
+        });
+
+        const groups = GROUP_MODES[targetMode];
+        waffle63.innerHTML = '';
+
+        groups.forEach(g => {
+          const block = document.createElement('div');
+          block.className = 'matrix-group-block';
+
+          // Filter matching provinces
+          const matched = PROVINCES
+            .map((p, idx) => ({ ...p, originalIdx: idx }))
+            .filter(g.filter);
+
+          if (g.sort) {
+            matched.sort(g.sort);
+          }
+
+          const count = matched.length;
+          const pct = ((count / 63) * 100).toFixed(1);
+
+          const header = document.createElement('div');
+          header.className = 'matrix-group-header';
+          header.innerHTML = `
+            <span class="matrix-group-dot" style="background:${g.color};"></span>
+            <span class="matrix-group-title-text">${g.name} · ${count} (${pct}%)</span>
+          `;
+
+          const cellsWrap = document.createElement('div');
+          cellsWrap.className = 'matrix-group-cells';
+
+          matched.forEach(item => {
+            const cell = provinceCells[item.originalIdx];
+            cell.className = `waffle-cell ${g.colorClass}${item.originalIdx === selectedProvinceIdx ? ' is-selected' : ''}`;
+            cellsWrap.appendChild(cell);
+          });
+
+          block.appendChild(header);
+          block.appendChild(cellsWrap);
+          waffle63.appendChild(block);
+        });
+
+        // Update Summary Table
+        renderSummaryTable(targetMode, groups);
+
+        // 3. LAST, INVERT, PLAY (FLIP)
+        if (!isReducedMotion && isMatrixInitialized) {
+          provinceCells.forEach(cell => {
+            const first = firstRects.get(cell);
+            if (!first) return;
+            const last = cell.getBoundingClientRect();
+            const dx = first.left - last.left;
+            const dy = first.top - last.top;
+
+            if (dx !== 0 || dy !== 0) {
+              cell.style.transition = 'none';
+              cell.style.transform = `translate(${dx}px, ${dy}px)`;
+            }
+          });
+
+          // Force reflow
+          waffle63.offsetHeight;
+
+          // Play transition to target position (duration ~600ms, smooth cubic-bezier)
+          provinceCells.forEach(cell => {
+            cell.style.transition = 'transform 600ms cubic-bezier(0.2, 0.8, 0.2, 1), background-color 400ms ease, color 400ms ease';
+            cell.style.transform = '';
+          });
+
+          flipTimeout = setTimeout(() => {
+            provinceCells.forEach(cell => {
+              cell.style.transition = '';
+              cell.style.transform = '';
+            });
+            flipTimeout = null;
+          }, 650);
+        }
+
+        isMatrixInitialized = true;
+      }
+
+      // Attach event listeners to mode buttons
+      modeBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+          const mode = btn.getAttribute('data-group-mode');
+          if (mode === currentGroupMode) return;
+          renderMatrixWithFLIP(mode);
+        });
+      });
 
       // 3. Setup 12 Palaces Wheel
       const svg = document.getElementById('tinhban-wheel');
@@ -2400,7 +2862,7 @@ const QA_SAMPLES = [
       });
 
       // Initial Calls
-      renderProvinces();
+      renderMatrixWithFLIP('offset');
       updateProvinceInspector();
       renderTopics();
       updateTopicInspector();
