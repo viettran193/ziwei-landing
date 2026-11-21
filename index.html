@@ -1367,6 +1367,636 @@
       border: 1px solid rgba(0, 0, 0, 0.2);
     }
 
+    /* =========================================================
+       PIXEL SOLAR MAP OF VIETNAM (63 PROVINCES + HS & TS)
+       ========================================================= */
+    .matrix-stage-layout {
+      display: block;
+      width: 100%;
+    }
+
+    .matrix-stage-layout.is-map-mode {
+      display: grid;
+      grid-template-columns: minmax(0, 1.24fr) minmax(0, 0.96fr);
+      gap: 24px;
+      align-items: start;
+      margin-bottom: 24px;
+    }
+
+    .matrix-stage-left {
+      min-width: 0;
+      width: 100%;
+    }
+
+    .matrix-stage-right {
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+      min-width: 0;
+      width: 100%;
+    }
+
+    .matrix-stage-layout:not(.is-map-mode) .matrix-stage-right {
+      margin-top: 0;
+    }
+
+    .matrix-stage-layout:not(.is-map-mode) .solar-sim-deck {
+      display: none;
+    }
+
+    .matrix-stage-layout.is-map-mode .matrix-groups-wrap {
+      margin-bottom: 0;
+    }
+
+    /* Pixel Map Frame */
+    .pixel-map-stage {
+      background: #eceae2;
+      border: var(--border);
+      border-radius: 16px;
+      padding: 16px 16px 14px;
+      box-shadow: var(--shadow-hard-sm);
+      position: relative;
+      width: 100%;
+      box-sizing: border-box;
+    }
+
+    .pixel-map-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 10px;
+      padding-bottom: 10px;
+      border-bottom: 1px dashed rgba(20, 20, 19, 0.2);
+    }
+
+    .pixel-map-title {
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: var(--ink);
+      letter-spacing: 0.03em;
+    }
+
+    .pixel-map-meta {
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      font-weight: 600;
+      color: var(--ink-muted);
+      font-variant-numeric: tabular-nums;
+    }
+
+    /* Longitude Meridian Ruler */
+    .pixel-map-ruler {
+      display: grid;
+      grid-template-columns: repeat(11, minmax(0, 1fr));
+      gap: 3px;
+      margin-bottom: 6px;
+      padding: 0 2px;
+      font-family: var(--font-mono);
+      font-size: 0.64rem;
+      font-weight: 700;
+      color: var(--ink-subtle);
+      font-variant-numeric: tabular-nums;
+      text-align: center;
+    }
+
+    .pixel-map-ruler span {
+      white-space: nowrap;
+      overflow: hidden;
+    }
+
+    /* Canvas Grid 11 cols x 19 rows */
+    .pixel-map-canvas {
+      position: relative;
+      width: 100%;
+      background:
+        repeating-linear-gradient(
+          to right,
+          rgba(20, 20, 19, 0.045) 0,
+          rgba(20, 20, 19, 0.045) 1px,
+          transparent 1px,
+          transparent calc(100% / 11)
+        ),
+        repeating-linear-gradient(
+          to bottom,
+          rgba(20, 20, 19, 0.04) 0,
+          rgba(20, 20, 19, 0.04) 1px,
+          transparent 1px,
+          transparent calc(100% / 19)
+        ),
+        #f7f6f1;
+      border: 1px solid rgba(20, 20, 19, 0.24);
+      border-radius: 10px;
+      padding: 26px 6px 6px;
+      box-sizing: border-box;
+    }
+
+    .pixel-map-grid {
+      display: grid;
+      grid-template-columns: repeat(11, minmax(0, 1fr));
+      grid-template-rows: repeat(19, minmax(0, 1fr));
+      gap: 3px;
+      position: relative;
+      z-index: 2;
+      width: 100%;
+    }
+
+    .pixel-map-grid .waffle-cell {
+      width: 100%;
+      height: 100%;
+      min-width: 0;
+      min-height: 0;
+      aspect-ratio: 1;
+      border-radius: 4px;
+      font-size: 0.68rem;
+      line-height: 1.05;
+      padding: 1px;
+      position: relative;
+    }
+
+    .pixel-map-grid .waffle-cell .cell-sub {
+      font-size: 0.54rem;
+      line-height: 1;
+      margin-top: 1px;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .pixel-map-grid .waffle-cell:focus-visible,
+    .waffle-cell:focus-visible {
+      outline: 3px solid var(--accent-yellow);
+      outline-offset: 2px;
+      z-index: 6;
+    }
+
+    /* Canh Gio Simulation Tile Colors (Dual-coded with symbol + contrast) */
+    .waffle-cell.cell-canh-next {
+      background: var(--accent-vermilion);
+      color: #ffffff;
+    }
+
+    .waffle-cell.cell-canh-prev {
+      background: var(--wheel-cobalt);
+      color: #ffffff;
+    }
+
+    .waffle-cell.cell-canh-same {
+      background: #2f2d4f;
+      color: #ffffff;
+    }
+
+    /* Meridian Transition Sweep Line */
+    .pixel-meridian-line {
+      position: absolute;
+      top: 22px;
+      bottom: 4px;
+      width: 2px;
+      transform: translateX(-50%);
+      background: repeating-linear-gradient(
+        to bottom,
+        var(--accent-yellow) 0,
+        var(--accent-yellow) 6px,
+        #141413 6px,
+        #141413 10px
+      );
+      z-index: 4;
+      pointer-events: none;
+      opacity: 0;
+      transition: left 160ms var(--ease-snap), opacity 160ms ease;
+    }
+
+    .pixel-meridian-line.is-visible {
+      opacity: 0.95;
+    }
+
+    .pixel-meridian-tag {
+      position: absolute;
+      top: -19px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #141413;
+      color: var(--accent-yellow);
+      font-family: var(--font-mono);
+      font-size: 0.62rem;
+      font-weight: 700;
+      padding: 2px 6px;
+      border-radius: 4px;
+      white-space: nowrap;
+      font-variant-numeric: tabular-nums;
+      box-shadow: 1px 1px 0 rgba(20, 20, 19, 0.4);
+    }
+
+    /* East Sea & Archipelagos (Hoang Sa & Truong Sa) */
+    .pixel-sea-label {
+      grid-column: 9 / span 3;
+      grid-row: 4 / span 2;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      pointer-events: none;
+      font-family: var(--font-mono);
+      font-size: 0.64rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      color: rgba(29, 78, 216, 0.55);
+      text-align: center;
+      line-height: 1.3;
+      user-select: none;
+    }
+
+    .pixel-archipelago {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 3px;
+      padding: 4px 2px;
+      border: 1px dashed rgba(29, 78, 216, 0.45);
+      border-radius: 6px;
+      background: rgba(29, 78, 216, 0.05);
+      pointer-events: none;
+      text-align: center;
+      user-select: none;
+    }
+
+    .pixel-archipelago.is-hoangsa {
+      grid-column: 10 / span 2;
+      grid-row: 8 / span 2;
+    }
+
+    .pixel-archipelago.is-truongsa {
+      grid-column: 10 / span 2;
+      grid-row: 14 / span 2;
+    }
+
+    .archipelago-dots {
+      display: grid;
+      grid-template-columns: repeat(3, 5px);
+      gap: 2px;
+    }
+
+    .archipelago-dots i {
+      display: block;
+      width: 5px;
+      height: 5px;
+      border-radius: 1px;
+      background: var(--accent-vermilion);
+      border: 0.5px solid #141413;
+    }
+
+    .archipelago-dots i.is-empty {
+      background: transparent;
+      border-color: transparent;
+    }
+
+    .archipelago-name {
+      font-family: var(--font-mono);
+      font-size: 0.58rem;
+      font-weight: 800;
+      color: var(--ink);
+      line-height: 1.15;
+    }
+
+    .archipelago-lon {
+      font-family: var(--font-mono);
+      font-size: 0.52rem;
+      font-weight: 600;
+      color: var(--ink-subtle);
+      font-variant-numeric: tabular-nums;
+      line-height: 1;
+    }
+
+    .pixel-map-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 10px;
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      color: var(--ink-muted);
+    }
+
+    /* Solar Birth-Time Simulator Deck */
+    .solar-sim-deck {
+      background: #ffffff;
+      border: var(--border);
+      border-radius: 14px;
+      padding: 20px;
+      box-shadow: var(--shadow-hard-sm);
+      width: 100%;
+      box-sizing: border-box;
+    }
+
+    .solar-sim-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 14px;
+      padding-bottom: 12px;
+      border-bottom: var(--border-light);
+    }
+
+    .solar-sim-kicker {
+      font-family: var(--font-mono);
+      font-size: 0.74rem;
+      font-weight: 700;
+      color: var(--accent-cobalt);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .solar-layer-switch {
+      display: inline-flex;
+      background: var(--paper);
+      border: var(--border-thin);
+      border-radius: 9px;
+      padding: 2px;
+      gap: 2px;
+    }
+
+    .solar-layer-btn {
+      font-family: var(--font-mono);
+      font-size: 0.74rem;
+      font-weight: 700;
+      padding: 6px 10px;
+      min-height: 32px;
+      border-radius: 7px;
+      border: none;
+      background: transparent;
+      color: var(--ink-muted);
+      cursor: pointer;
+      white-space: nowrap;
+      transition: background-color 0.15s ease, color 0.15s ease;
+    }
+
+    .solar-layer-btn.is-active {
+      background: var(--paper-dark);
+      color: #ffffff;
+    }
+
+    .solar-clock-row {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+
+    .solar-clock-value {
+      font-family: var(--font-mono);
+      font-size: 2rem;
+      font-weight: 800;
+      line-height: 1;
+      color: var(--ink);
+      font-variant-numeric: tabular-nums;
+      letter-spacing: -0.02em;
+    }
+
+    .solar-clock-sub {
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: var(--ink-muted);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .solar-slider-wrap {
+      margin-bottom: 14px;
+    }
+
+    .solar-range-input {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 100%;
+      height: 10px;
+      border-radius: 6px;
+      background: var(--paper-muted);
+      border: 1.5px solid #141413;
+      outline: none;
+      cursor: pointer;
+    }
+
+    .solar-range-input::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 24px;
+      height: 24px;
+      border-radius: 6px;
+      background: var(--accent-yellow);
+      border: 2px solid #141413;
+      box-shadow: 2px 2px 0 #141413;
+      cursor: grab;
+      transition: transform 0.12s var(--ease-snap);
+    }
+
+    .solar-range-input::-webkit-slider-thumb:active {
+      cursor: grabbing;
+      transform: scale(1.06);
+    }
+
+    .solar-range-input::-moz-range-thumb {
+      width: 24px;
+      height: 24px;
+      border-radius: 6px;
+      background: var(--accent-yellow);
+      border: 2px solid #141413;
+      box-shadow: 2px 2px 0 #141413;
+      cursor: grab;
+    }
+
+    .solar-range-input:focus-visible {
+      outline: 2px solid var(--accent-cobalt);
+      outline-offset: 3px;
+    }
+
+    .solar-slider-ticks {
+      display: flex;
+      justify-content: space-between;
+      font-family: var(--font-mono);
+      font-size: 0.68rem;
+      color: var(--ink-subtle);
+      margin-top: 5px;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .solar-controls-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-bottom: 16px;
+    }
+
+    .solar-play-btn {
+      font-family: var(--font-display);
+      font-size: 0.8rem;
+      font-weight: 700;
+      padding: 7px 12px;
+      min-height: 38px;
+      border-radius: 9px;
+      border: var(--border-thin);
+      background: var(--accent-yellow);
+      color: var(--ink);
+      box-shadow: 2px 2px 0 #141413;
+      cursor: pointer;
+      white-space: nowrap;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: transform 0.12s var(--ease-snap), background-color 0.12s ease;
+    }
+
+    .solar-play-btn:hover {
+      background: var(--accent-yellow-hover);
+      transform: translate(-1px, -1px);
+    }
+
+    .solar-play-btn.is-playing {
+      background: var(--paper-dark);
+      color: var(--accent-yellow);
+    }
+
+    .solar-preset-btn {
+      font-family: var(--font-mono);
+      font-size: 0.74rem;
+      font-weight: 700;
+      padding: 7px 10px;
+      min-height: 38px;
+      border-radius: 9px;
+      border: var(--border-thin);
+      background: var(--paper);
+      color: var(--ink);
+      cursor: pointer;
+      white-space: nowrap;
+      font-variant-numeric: tabular-nums;
+      transition: background-color 0.12s ease, border-color 0.12s ease;
+    }
+
+    .solar-preset-btn:hover {
+      background: #e5e2d8;
+    }
+
+    .solar-preset-btn.is-active {
+      background: var(--accent-cobalt);
+      color: #ffffff;
+      border-color: #141413;
+    }
+
+    /* Split Status Bar */
+    .solar-split-box {
+      background: var(--paper);
+      border: var(--border-thin);
+      border-radius: 10px;
+      padding: 12px 14px;
+    }
+
+    .solar-split-bar {
+      display: flex;
+      width: 100%;
+      height: 12px;
+      border-radius: 6px;
+      overflow: hidden;
+      border: 1px solid #141413;
+      background: var(--paper-muted);
+      margin-bottom: 10px;
+    }
+
+    .solar-split-seg {
+      height: 100%;
+      transition: width 180ms var(--ease-snap);
+    }
+
+    .solar-split-seg.is-next {
+      background: var(--accent-vermilion);
+    }
+
+    .solar-split-seg.is-prev {
+      background: var(--wheel-cobalt);
+    }
+
+    .solar-split-seg.is-same {
+      background: #2f2d4f;
+    }
+
+    .solar-split-legend {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      font-family: var(--font-mono);
+      font-size: 0.76rem;
+      color: var(--ink);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .solar-legend-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    .solar-legend-left {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-weight: 700;
+    }
+
+    .solar-swatch {
+      width: 10px;
+      height: 10px;
+      border-radius: 2px;
+      border: 1px solid #141413;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+
+    .solar-split-note {
+      margin-top: 8px;
+      padding-top: 8px;
+      border-top: 1px dashed rgba(20, 20, 19, 0.16);
+      font-family: var(--font-sans);
+      font-size: 0.8rem;
+      color: var(--ink-muted);
+      line-height: 1.45;
+    }
+
+    @keyframes matrixSurfaceFadeIn {
+      from {
+        opacity: 0;
+      }
+      to {
+        opacity: 1;
+      }
+    }
+
+    .matrix-fade-enter {
+      animation: matrixSurfaceFadeIn 320ms var(--ease-snap) both;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .matrix-fade-enter {
+        animation: none;
+      }
+    }
+
+    @media (max-width: 960px) {
+      .matrix-stage-layout.is-map-mode {
+        grid-template-columns: 1fr;
+        gap: 18px;
+      }
+      .pixel-map-stage {
+        max-width: 560px;
+        margin: 0 auto;
+      }
+    }
+
     @media (max-width: 900px) {
       .hero-kpis, .waffle-regions-summary, .steps-3-col {
         grid-template-columns: 1fr;
@@ -1552,7 +2182,52 @@
       }
     }
 
+    @media (max-width: 580px) {
+      .pixel-map-grid .waffle-cell {
+        min-width: 0;
+        min-height: 0;
+        font-size: 0.62rem;
+      }
+      .pixel-map-grid .waffle-cell .cell-sub {
+        display: none;
+      }
+    }
+
     @media (max-width: 480px) {
+      .pixel-map-stage {
+        padding: 12px 10px;
+      }
+      .pixel-map-grid {
+        gap: 2px;
+      }
+      .pixel-map-grid .waffle-cell {
+        width: 100%;
+        height: 100%;
+        min-width: 0;
+        min-height: 0;
+        flex: none;
+        font-size: 0.56rem;
+        border-radius: 3px;
+      }
+      .pixel-map-grid .waffle-cell .cell-sub {
+        display: none;
+      }
+      .pixel-map-ruler {
+        font-size: 0.54rem;
+        gap: 2px;
+      }
+      .archipelago-name {
+        font-size: 0.5rem;
+      }
+      .archipelago-lon {
+        display: none;
+      }
+      .solar-sim-deck {
+        padding: 14px 12px;
+      }
+      .solar-clock-value {
+        font-size: 1.65rem;
+      }
       .matrix-mode-btn {
         font-size: 0.76rem;
         padding: 6px 10px;
@@ -1561,14 +2236,14 @@
       .matrix-group-cells {
         gap: 4px;
       }
-      .waffle-cell {
+      .matrix-group-cells .waffle-cell {
         width: 36px;
         height: 36px;
         flex: 0 0 36px;
         font-size: 0.65rem;
         padding: 1px;
       }
-      .waffle-cell .cell-sub {
+      .matrix-group-cells .waffle-cell .cell-sub {
         display: none;
       }
       .matrix-summary-table th,
@@ -1810,11 +2485,14 @@
 
       <!-- Tab 1: 63 Tỉnh Thành -->
       <div class="tab-panel is-active" id="panel-63" role="tabpanel" aria-labelledby="tab-btn-63">
-        <!-- Hàng nút chuyển nhóm ma trận -->
+        <!-- Hàng nút chuyển chế độ hiển thị -->
         <div class="matrix-mode-toolbar">
-          <span class="matrix-mode-label">Phân nhóm:</span>
-          <div class="matrix-mode-btns" role="tablist" aria-label="Chế độ phân nhóm ma trận 63 tỉnh thành">
-            <button type="button" class="matrix-mode-btn is-active" id="mode-btn-offset" data-group-mode="offset" role="tab" aria-selected="true">
+          <span class="matrix-mode-label">Chế độ xem:</span>
+          <div class="matrix-mode-btns" role="tablist" aria-label="Chế độ hiển thị ma trận 63 tỉnh thành">
+            <button type="button" class="matrix-mode-btn is-active" id="mode-btn-map" data-group-mode="map" role="tab" aria-selected="true">
+              Bản đồ Pixel
+            </button>
+            <button type="button" class="matrix-mode-btn" id="mode-btn-offset" data-group-mode="offset" role="tab" aria-selected="false">
               Theo độ lệch giờ
             </button>
             <button type="button" class="matrix-mode-btn" id="mode-btn-region" data-group-mode="region" role="tab" aria-selected="false">
@@ -1826,15 +2504,116 @@
           </div>
         </div>
 
-        <!-- Khối chứa ma trận 63 ô động -->
-        <div class="matrix-groups-wrap" id="waffle-grid-63" role="grid" aria-label="Ma trận 63 tỉnh thành tự sắp xếp"></div>
+        <!-- Vùng tương tác 2 cột (khi ở Bản đồ Pixel) hoặc xếp dọc (ở các chế độ ma trận cũ) -->
+        <div class="matrix-stage-layout is-map-mode" id="matrix-stage-layout">
+          <div class="matrix-stage-left">
+            <!-- Khối chứa Bản đồ Pixel 63 tỉnh HOẶC các nhóm ma trận 63 ô (dùng chung 63 DOM để FLIP) -->
+            <div class="matrix-groups-wrap" id="waffle-grid-63" role="grid" aria-label="Bản đồ pixel và ma trận 63 tỉnh thành theo giờ mặt trời thực"></div>
+          </div>
+
+          <div class="matrix-stage-right">
+            <!-- Bộ điều khiển thanh kéo giờ sinh mô phỏng đổi canh giờ -->
+            <div class="solar-sim-deck" id="solar-sim-deck" aria-label="Mô phỏng đổi canh giờ theo giờ đồng hồ">
+              <div class="solar-sim-top">
+                <span class="solar-sim-kicker">MÔ PHỎNG ĐỔI CANH GIỜ</span>
+                <div class="solar-layer-switch" role="group" aria-label="Lớp tô màu bản đồ pixel">
+                  <button type="button" class="solar-layer-btn is-active" data-map-layer="canh" aria-pressed="true">Đổi canh giờ</button>
+                  <button type="button" class="solar-layer-btn" data-map-layer="offset" aria-pressed="false">4 nhóm độ lệch</button>
+                </div>
+              </div>
+
+              <div class="solar-clock-row">
+                <div>
+                  <div class="solar-clock-value" id="sim-clock-display">22:50</div>
+                  <div class="solar-clock-sub" id="sim-clock-canh">Giờ đồng hồ UTC+7 (105°Đ) · Giờ Hợi</div>
+                </div>
+                <button type="button" class="solar-play-btn" id="solar-play-btn" aria-pressed="false">
+                  ▶ Chạy quét
+                </button>
+              </div>
+
+              <div class="solar-slider-wrap">
+                <input
+                  type="range"
+                  id="solar-time-slider"
+                  class="solar-range-input"
+                  min="0"
+                  max="1439"
+                  step="1"
+                  value="1370"
+                  aria-label="Chọn giờ đồng hồ UTC+7 từ 00:00 đến 23:59"
+                >
+                <div class="solar-slider-ticks" aria-hidden="true">
+                  <span>00:00</span>
+                  <span>06:00</span>
+                  <span>12:00</span>
+                  <span>18:00</span>
+                  <span>23:59</span>
+                </div>
+              </div>
+
+              <div class="solar-controls-row" role="group" aria-label="Các mốc giao canh giờ phổ biến">
+                <button type="button" class="solar-preset-btn is-active" data-sim-preset="1370">22:50 Hợi→Tý</button>
+                <button type="button" class="solar-preset-btn" data-sim-preset="50">00:50 Tý→Sửu</button>
+                <button type="button" class="solar-preset-btn" data-sim-preset="410">06:50 Mão→Thìn</button>
+                <button type="button" class="solar-preset-btn" data-sim-preset="650">10:50 Tỵ→Ngọ</button>
+              </div>
+
+              <div class="solar-split-box" id="solar-split-box">
+                <div class="solar-split-bar" id="solar-split-bar"></div>
+                <div class="solar-split-legend" id="solar-split-legend"></div>
+                <div class="solar-split-note" id="solar-split-note"></div>
+              </div>
+            </div>
+
+            <!-- Province Inspector Panel -->
+            <div class="inspector-box" id="province-inspector-panel">
+              <div class="inspector-header">
+                <div>
+                  <div class="inspector-kicker" id="prov-kicker">ĐƠN VỊ ĐỊA LÝ · 25 / 63</div>
+                  <h3 class="inspector-name" id="prov-name">Hà Nội</h3>
+                </div>
+                <div class="mono" style="font-size:0.85rem;font-weight:700;color:var(--accent-cobalt);" id="prov-region-tag">Bắc Bộ</div>
+              </div>
+              <table class="inspector-specs-table">
+                <tbody>
+                  <tr>
+                    <th>Vùng địa lý</th>
+                    <td id="prov-region">Bắc Bộ</td>
+                  </tr>
+                  <tr>
+                    <th>Kinh độ trung tâm</th>
+                    <td id="prov-lon" style="font-variant-numeric:tabular-nums;">105.83° Đ</td>
+                  </tr>
+                  <tr>
+                    <th>Độ lệch Mặt Trời Thực</th>
+                    <td id="prov-offset" style="font-variant-numeric:tabular-nums;">+3 phút</td>
+                  </tr>
+                  <tr>
+                    <th id="prov-solar-label">Giờ Mặt Trời lúc 22:50</th>
+                    <td id="prov-solar-val" style="font-variant-numeric:tabular-nums;">22:53 · Giờ Hợi</td>
+                  </tr>
+                </tbody>
+              </table>
+              <div class="inspector-callout">
+                <strong id="prov-example-title">VÍ DỤ CHUYỂN CANH GIỜ (MỐC 22:50 ĐỒNG HỒ):</strong><br>
+                <span id="prov-example">Tại Hà Nội (+3 phút), đồng hồ chỉ 22:50 tương ứng 22:53 Giờ Mặt Trời Thực — vẫn nằm trong giờ Hợi.</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="waffle-livebar" id="waffle-livebar">
+          <span id="waffle-livebar-text">Di chuột hoặc chạm vào từng ô tỉnh trên bản đồ để đối chiếu Giờ Mặt Trời Thực.</span>
+          <span style="font-weight:700;font-variant-numeric:tabular-nums;">n = 63 tỉnh/thành (Giờ Mặt Trời Thực)</span>
+        </div>
 
         <!-- Bảng tóm tắt dưới ma trận -->
         <div class="matrix-summary-table-wrap">
           <table class="matrix-summary-table">
             <thead>
               <tr>
-                <th style="text-align:left;">Nhóm phân loại</th>
+                <th style="text-align:left;" id="summary-col-heading">Nhóm phân loại</th>
                 <th style="text-align:right;">Số tỉnh/thành</th>
                 <th style="text-align:right;">Tỷ lệ (%)</th>
               </tr>
@@ -1843,42 +2622,6 @@
               <!-- Render động theo chế độ đang chọn -->
             </tbody>
           </table>
-        </div>
-
-        <div class="waffle-livebar">
-          <span>Tổng quan: Di chuột hoặc chạm vào từng ô vuông để xem tên đơn vị tương ứng.</span>
-          <span style="font-weight:700;">n = 63 tỉnh/thành (Giờ Mặt Trời Thực)</span>
-        </div>
-
-        <!-- Province Inspector Panel -->
-        <div class="inspector-box" id="province-inspector-panel">
-          <div class="inspector-header">
-            <div>
-              <div class="inspector-kicker" id="prov-kicker">ĐƠN VỊ ĐỊA LÝ · 25 / 63</div>
-              <h3 class="inspector-name" id="prov-name">Hà Nội</h3>
-            </div>
-            <div class="mono" style="font-size:0.85rem;font-weight:700;color:var(--accent-cobalt);" id="prov-region-tag">Bắc Bộ</div>
-          </div>
-          <table class="inspector-specs-table">
-            <tbody>
-              <tr>
-                <th>Vùng địa lý</th>
-                <td id="prov-region">Bắc Bộ</td>
-              </tr>
-              <tr>
-                <th>Kinh độ trung tâm</th>
-                <td id="prov-lon">105.83° Đ</td>
-              </tr>
-              <tr>
-                <th>Độ lệch Mặt Trời Thực</th>
-                <td id="prov-offset">+3 phút</td>
-              </tr>
-            </tbody>
-          </table>
-          <div class="inspector-callout">
-            <strong>VÍ DỤ CHUYỂN CANH GIỜ (MỐC 22:50 ĐỒNG HỒ):</strong><br>
-            <span id="prov-example">Tại Hà Nội (+3 phút), đồng hồ chỉ 22:50 tương ứng 22:53 Giờ Mặt Trời Thực — vẫn nằm trong giờ Hợi.</span>
-          </div>
         </div>
       </div>
 
@@ -2168,69 +2911,69 @@
   <script>
     (function () {
       const PROVINCES = [
-        { code: 'HG', name: 'Hà Giang', region: 'Bắc Bộ', lon: 104.98, offset: 0 },
-        { code: 'CB', name: 'Cao Bằng', region: 'Bắc Bộ', lon: 106.26, offset: 5 },
-        { code: 'BK', name: 'Bắc Kạn', region: 'Bắc Bộ', lon: 105.83, offset: 3 },
-        { code: 'TQ', name: 'Tuyên Quang', region: 'Bắc Bộ', lon: 105.21, offset: 1 },
-        { code: 'LC', name: 'Lào Cai', region: 'Bắc Bộ', lon: 103.97, offset: -4 },
-        { code: 'ĐB', name: 'Điện Biên', region: 'Bắc Bộ', lon: 103.02, offset: -8 },
-        { code: 'LCh', name: 'Lai Châu', region: 'Bắc Bộ', lon: 103.47, offset: -6 },
-        { code: 'SL', name: 'Sơn La', region: 'Bắc Bộ', lon: 103.91, offset: -4 },
-        { code: 'YB', name: 'Yên Bái', region: 'Bắc Bộ', lon: 104.87, offset: -1 },
-        { code: 'HB', name: 'Hoà Bình', region: 'Bắc Bộ', lon: 105.34, offset: 1 },
-        { code: 'TN', name: 'Thái Nguyên', region: 'Bắc Bộ', lon: 105.85, offset: 3 },
-        { code: 'LS', name: 'Lạng Sơn', region: 'Bắc Bộ', lon: 106.76, offset: 7 },
-        { code: 'QN', name: 'Quảng Ninh', region: 'Bắc Bộ', lon: 107.08, offset: 8 },
-        { code: 'BG', name: 'Bắc Giang', region: 'Bắc Bộ', lon: 106.20, offset: 5 },
-        { code: 'PT', name: 'Phú Thọ', region: 'Bắc Bộ', lon: 105.22, offset: 1 },
-        { code: 'VP', name: 'Vĩnh Phúc', region: 'Bắc Bộ', lon: 105.60, offset: 2 },
-        { code: 'BN', name: 'Bắc Ninh', region: 'Bắc Bộ', lon: 106.07, offset: 4 },
-        { code: 'HD', name: 'Hải Dương', region: 'Bắc Bộ', lon: 106.33, offset: 5 },
-        { code: 'HP', name: 'Hải Phòng', region: 'Bắc Bộ', lon: 106.68, offset: 7 },
-        { code: 'HY', name: 'Hưng Yên', region: 'Bắc Bộ', lon: 106.05, offset: 4 },
-        { code: 'TB', name: 'Thái Bình', region: 'Bắc Bộ', lon: 106.34, offset: 5 },
-        { code: 'HNa', name: 'Hà Nam', region: 'Bắc Bộ', lon: 105.92, offset: 4 },
-        { code: 'NĐ', name: 'Nam Định', region: 'Bắc Bộ', lon: 106.17, offset: 5 },
-        { code: 'NB', name: 'Ninh Bình', region: 'Bắc Bộ', lon: 105.97, offset: 4 },
-        { code: 'HN', name: 'Hà Nội', region: 'Bắc Bộ', lon: 105.83, offset: 3 },
-        { code: 'TH', name: 'Thanh Hóa', region: 'Trung Bộ', lon: 105.78, offset: 3 },
-        { code: 'NA', name: 'Nghệ An', region: 'Trung Bộ', lon: 105.68, offset: 3 },
-        { code: 'HT', name: 'Hà Tĩnh', region: 'Trung Bộ', lon: 105.90, offset: 4 },
-        { code: 'QB', name: 'Quảng Bình', region: 'Trung Bộ', lon: 106.62, offset: 6 },
-        { code: 'QT', name: 'Quảng Trị', region: 'Trung Bộ', lon: 107.18, offset: 9 },
-        { code: 'HU', name: 'Thừa Thiên Huế', region: 'Trung Bộ', lon: 107.59, offset: 10 },
-        { code: 'ĐN', name: 'Đà Nẵng', region: 'Trung Bộ', lon: 108.20, offset: 13 },
-        { code: 'QNa', name: 'Quảng Nam', region: 'Trung Bộ', lon: 108.33, offset: 13 },
-        { code: 'QNg', name: 'Quảng Ngãi', region: 'Trung Bộ', lon: 108.80, offset: 15 },
-        { code: 'BĐ', name: 'Bình Định', region: 'Trung Bộ', lon: 109.22, offset: 17 },
-        { code: 'PY', name: 'Phú Yên', region: 'Trung Bộ', lon: 109.31, offset: 17 },
-        { code: 'KH', name: 'Khánh Hòa', region: 'Trung Bộ', lon: 109.19, offset: 17 },
-        { code: 'NT', name: 'Ninh Thuận', region: 'Trung Bộ', lon: 108.99, offset: 16 },
-        { code: 'BTh', name: 'Bình Thuận', region: 'Trung Bộ', lon: 108.10, offset: 12 },
-        { code: 'KT', name: 'Kon Tum', region: 'Tây Nguyên', lon: 108.00, offset: 12 },
-        { code: 'GL', name: 'Gia Lai', region: 'Tây Nguyên', lon: 108.00, offset: 12 },
-        { code: 'ĐL', name: 'Đắk Lắk', region: 'Tây Nguyên', lon: 108.04, offset: 12 },
-        { code: 'ĐNo', name: 'Đắk Nông', region: 'Tây Nguyên', lon: 107.69, offset: 11 },
-        { code: 'LĐ', name: 'Lâm Đồng', region: 'Tây Nguyên', lon: 108.45, offset: 14 },
-        { code: 'BP', name: 'Bình Phước', region: 'Nam Bộ', lon: 106.90, offset: 8 },
-        { code: 'TNi', name: 'Tây Ninh', region: 'Nam Bộ', lon: 106.10, offset: 4 },
-        { code: 'BD', name: 'Bình Dương', region: 'Nam Bộ', lon: 106.65, offset: 7 },
-        { code: 'ĐNa', name: 'Đồng Nai', region: 'Nam Bộ', lon: 106.84, offset: 7 },
-        { code: 'VT', name: 'Bà Rịa – Vũng Tàu', region: 'Nam Bộ', lon: 107.08, offset: 8 },
-        { code: 'HCM', name: 'TP. Hồ Chí Minh', region: 'Nam Bộ', lon: 106.63, offset: 7 },
-        { code: 'LA', name: 'Long An', region: 'Nam Bộ', lon: 106.41, offset: 6 },
-        { code: 'TG', name: 'Tiền Giang', region: 'Nam Bộ', lon: 106.36, offset: 5 },
-        { code: 'BT', name: 'Bến Tre', region: 'Nam Bộ', lon: 106.38, offset: 6 },
-        { code: 'TV', name: 'Trà Vinh', region: 'Nam Bộ', lon: 106.34, offset: 5 },
-        { code: 'VL', name: 'Vĩnh Long', region: 'Nam Bộ', lon: 105.97, offset: 4 },
-        { code: 'ĐT', name: 'Đồng Tháp', region: 'Nam Bộ', lon: 105.64, offset: 3 },
-        { code: 'AG', name: 'An Giang', region: 'Nam Bộ', lon: 105.43, offset: 2 },
-        { code: 'KG', name: 'Kiên Giang', region: 'Nam Bộ', lon: 105.08, offset: 0 },
-        { code: 'CT', name: 'Cần Thơ', region: 'Nam Bộ', lon: 105.78, offset: 3 },
-        { code: 'HG2', name: 'Hậu Giang', region: 'Nam Bộ', lon: 105.47, offset: 2 },
-        { code: 'ST', name: 'Sóc Trăng', region: 'Nam Bộ', lon: 105.97, offset: 4 },
-        { code: 'BL', name: 'Bạc Liêu', region: 'Nam Bộ', lon: 105.72, offset: 3 },
-        { code: 'CM', name: 'Cà Mau', region: 'Nam Bộ', lon: 105.15, offset: 1 }
+        { code: 'HG', name: 'Hà Giang', region: 'Bắc Bộ', lon: 104.98, offset: 0, gx: 3, gy: 1 },
+        { code: 'CB', name: 'Cao Bằng', region: 'Bắc Bộ', lon: 106.26, offset: 5, gx: 6, gy: 1 },
+        { code: 'BK', name: 'Bắc Kạn', region: 'Bắc Bộ', lon: 105.83, offset: 3, gx: 4, gy: 1 },
+        { code: 'TQ', name: 'Tuyên Quang', region: 'Bắc Bộ', lon: 105.21, offset: 1, gx: 3, gy: 2 },
+        { code: 'LC', name: 'Lào Cai', region: 'Bắc Bộ', lon: 103.97, offset: -4, gx: 2, gy: 2 },
+        { code: 'ĐB', name: 'Điện Biên', region: 'Bắc Bộ', lon: 103.02, offset: -8, gx: 1, gy: 3 },
+        { code: 'LCh', name: 'Lai Châu', region: 'Bắc Bộ', lon: 103.47, offset: -6, gx: 1, gy: 2 },
+        { code: 'SL', name: 'Sơn La', region: 'Bắc Bộ', lon: 103.91, offset: -4, gx: 2, gy: 4 },
+        { code: 'YB', name: 'Yên Bái', region: 'Bắc Bộ', lon: 104.87, offset: -1, gx: 2, gy: 3 },
+        { code: 'HB', name: 'Hoà Bình', region: 'Bắc Bộ', lon: 105.34, offset: 1, gx: 3, gy: 4 },
+        { code: 'TN', name: 'Thái Nguyên', region: 'Bắc Bộ', lon: 105.85, offset: 3, gx: 4, gy: 2 },
+        { code: 'LS', name: 'Lạng Sơn', region: 'Bắc Bộ', lon: 106.76, offset: 7, gx: 7, gy: 2 },
+        { code: 'QN', name: 'Quảng Ninh', region: 'Bắc Bộ', lon: 107.08, offset: 8, gx: 7, gy: 3 },
+        { code: 'BG', name: 'Bắc Giang', region: 'Bắc Bộ', lon: 106.20, offset: 5, gx: 6, gy: 2 },
+        { code: 'PT', name: 'Phú Thọ', region: 'Bắc Bộ', lon: 105.22, offset: 1, gx: 3, gy: 3 },
+        { code: 'VP', name: 'Vĩnh Phúc', region: 'Bắc Bộ', lon: 105.60, offset: 2, gx: 4, gy: 3 },
+        { code: 'BN', name: 'Bắc Ninh', region: 'Bắc Bộ', lon: 106.07, offset: 4, gx: 5, gy: 2 },
+        { code: 'HD', name: 'Hải Dương', region: 'Bắc Bộ', lon: 106.33, offset: 5, gx: 6, gy: 3 },
+        { code: 'HP', name: 'Hải Phòng', region: 'Bắc Bộ', lon: 106.68, offset: 7, gx: 7, gy: 4 },
+        { code: 'HY', name: 'Hưng Yên', region: 'Bắc Bộ', lon: 106.05, offset: 4, gx: 5, gy: 3 },
+        { code: 'TB', name: 'Thái Bình', region: 'Bắc Bộ', lon: 106.34, offset: 5, gx: 6, gy: 4 },
+        { code: 'HNa', name: 'Hà Nam', region: 'Bắc Bộ', lon: 105.92, offset: 4, gx: 5, gy: 4 },
+        { code: 'NĐ', name: 'Nam Định', region: 'Bắc Bộ', lon: 106.17, offset: 5, gx: 6, gy: 5 },
+        { code: 'NB', name: 'Ninh Bình', region: 'Bắc Bộ', lon: 105.97, offset: 4, gx: 5, gy: 5 },
+        { code: 'HN', name: 'Hà Nội', region: 'Bắc Bộ', lon: 105.83, offset: 3, gx: 4, gy: 4 },
+        { code: 'TH', name: 'Thanh Hóa', region: 'Trung Bộ', lon: 105.78, offset: 3, gx: 4, gy: 5 },
+        { code: 'NA', name: 'Nghệ An', region: 'Trung Bộ', lon: 105.68, offset: 3, gx: 4, gy: 6 },
+        { code: 'HT', name: 'Hà Tĩnh', region: 'Trung Bộ', lon: 105.90, offset: 4, gx: 5, gy: 6 },
+        { code: 'QB', name: 'Quảng Bình', region: 'Trung Bộ', lon: 106.62, offset: 6, gx: 6, gy: 7 },
+        { code: 'QT', name: 'Quảng Trị', region: 'Trung Bộ', lon: 107.18, offset: 9, gx: 7, gy: 7 },
+        { code: 'HU', name: 'Thừa Thiên Huế', region: 'Trung Bộ', lon: 107.59, offset: 10, gx: 8, gy: 8 },
+        { code: 'ĐN', name: 'Đà Nẵng', region: 'Trung Bộ', lon: 108.20, offset: 13, gx: 8, gy: 9 },
+        { code: 'QNa', name: 'Quảng Nam', region: 'Trung Bộ', lon: 108.33, offset: 13, gx: 8, gy: 10 },
+        { code: 'QNg', name: 'Quảng Ngãi', region: 'Trung Bộ', lon: 108.80, offset: 15, gx: 9, gy: 10 },
+        { code: 'BĐ', name: 'Bình Định', region: 'Trung Bộ', lon: 109.22, offset: 17, gx: 9, gy: 11 },
+        { code: 'PY', name: 'Phú Yên', region: 'Trung Bộ', lon: 109.31, offset: 17, gx: 9, gy: 12 },
+        { code: 'KH', name: 'Khánh Hòa', region: 'Trung Bộ', lon: 109.19, offset: 17, gx: 9, gy: 13 },
+        { code: 'NT', name: 'Ninh Thuận', region: 'Trung Bộ', lon: 108.99, offset: 16, gx: 9, gy: 15 },
+        { code: 'BTh', name: 'Bình Thuận', region: 'Trung Bộ', lon: 108.10, offset: 12, gx: 8, gy: 15 },
+        { code: 'KT', name: 'Kon Tum', region: 'Tây Nguyên', lon: 108.00, offset: 12, gx: 8, gy: 11 },
+        { code: 'GL', name: 'Gia Lai', region: 'Tây Nguyên', lon: 108.00, offset: 12, gx: 8, gy: 12 },
+        { code: 'ĐL', name: 'Đắk Lắk', region: 'Tây Nguyên', lon: 108.04, offset: 12, gx: 8, gy: 13 },
+        { code: 'ĐNo', name: 'Đắk Nông', region: 'Tây Nguyên', lon: 107.69, offset: 11, gx: 8, gy: 14 },
+        { code: 'LĐ', name: 'Lâm Đồng', region: 'Tây Nguyên', lon: 108.45, offset: 14, gx: 9, gy: 14 },
+        { code: 'BP', name: 'Bình Phước', region: 'Nam Bộ', lon: 106.90, offset: 8, gx: 7, gy: 13 },
+        { code: 'TNi', name: 'Tây Ninh', region: 'Nam Bộ', lon: 106.10, offset: 4, gx: 5, gy: 15 },
+        { code: 'BD', name: 'Bình Dương', region: 'Nam Bộ', lon: 106.65, offset: 7, gx: 7, gy: 14 },
+        { code: 'ĐNa', name: 'Đồng Nai', region: 'Nam Bộ', lon: 106.84, offset: 7, gx: 7, gy: 15 },
+        { code: 'VT', name: 'Bà Rịa – Vũng Tàu', region: 'Nam Bộ', lon: 107.08, offset: 8, gx: 7, gy: 17 },
+        { code: 'HCM', name: 'TP. Hồ Chí Minh', region: 'Nam Bộ', lon: 106.63, offset: 7, gx: 7, gy: 16 },
+        { code: 'LA', name: 'Long An', region: 'Nam Bộ', lon: 106.41, offset: 6, gx: 6, gy: 15 },
+        { code: 'TG', name: 'Tiền Giang', region: 'Nam Bộ', lon: 106.36, offset: 5, gx: 6, gy: 16 },
+        { code: 'BT', name: 'Bến Tre', region: 'Nam Bộ', lon: 106.38, offset: 6, gx: 6, gy: 17 },
+        { code: 'TV', name: 'Trà Vinh', region: 'Nam Bộ', lon: 106.34, offset: 5, gx: 6, gy: 18 },
+        { code: 'VL', name: 'Vĩnh Long', region: 'Nam Bộ', lon: 105.97, offset: 4, gx: 5, gy: 16 },
+        { code: 'ĐT', name: 'Đồng Tháp', region: 'Nam Bộ', lon: 105.64, offset: 3, gx: 4, gy: 16 },
+        { code: 'AG', name: 'An Giang', region: 'Nam Bộ', lon: 105.43, offset: 2, gx: 4, gy: 15 },
+        { code: 'KG', name: 'Kiên Giang', region: 'Nam Bộ', lon: 105.08, offset: 0, gx: 3, gy: 18 },
+        { code: 'CT', name: 'Cần Thơ', region: 'Nam Bộ', lon: 105.78, offset: 3, gx: 4, gy: 17 },
+        { code: 'HG2', name: 'Hậu Giang', region: 'Nam Bộ', lon: 105.47, offset: 2, gx: 4, gy: 18 },
+        { code: 'ST', name: 'Sóc Trăng', region: 'Nam Bộ', lon: 105.97, offset: 4, gx: 5, gy: 17 },
+        { code: 'BL', name: 'Bạc Liêu', region: 'Nam Bộ', lon: 105.72, offset: 3, gx: 4, gy: 19 },
+        { code: 'CM', name: 'Cà Mau', region: 'Nam Bộ', lon: 105.15, offset: 1, gx: 3, gy: 19 }
       ];
 
 const TOPICS = [
@@ -2365,37 +3108,189 @@ const QA_SAMPLES = [
         });
       });
 
-      // 2. Setup 63 Provinces Waffle Matrix (Dynamic Rearranging with FLIP Animation)
+      // 2. Setup 63 Provinces Pixel Solar Map & Waffle Matrix (Dynamic FLIP Rearranging)
+      const stageLayout = document.getElementById('matrix-stage-layout');
       const waffle63 = document.getElementById('waffle-grid-63');
       const summaryTbody = document.getElementById('matrix-summary-tbody');
+      const summaryHeading = document.getElementById('summary-col-heading');
+      const livebarText = document.getElementById('waffle-livebar-text');
       const modeBtns = document.querySelectorAll('[data-group-mode]');
+      const layerBtns = document.querySelectorAll('[data-map-layer]');
+      const presetBtns = document.querySelectorAll('[data-sim-preset]');
+      const simSlider = document.getElementById('solar-time-slider');
+      const simClockDisplay = document.getElementById('sim-clock-display');
+      const simClockCanh = document.getElementById('sim-clock-canh');
+      const simPlayBtn = document.getElementById('solar-play-btn');
+      const splitBarEl = document.getElementById('solar-split-bar');
+      const splitLegendEl = document.getElementById('solar-split-legend');
+      const splitNoteEl = document.getElementById('solar-split-note');
+
+      const CANH_GIO = [
+        { name: 'Tý', range: '23:00 – 00:59' },
+        { name: 'Sửu', range: '01:00 – 02:59' },
+        { name: 'Dần', range: '03:00 – 04:59' },
+        { name: 'Mão', range: '05:00 – 06:59' },
+        { name: 'Thìn', range: '07:00 – 08:59' },
+        { name: 'Tỵ', range: '09:00 – 10:59' },
+        { name: 'Ngọ', range: '11:00 – 12:59' },
+        { name: 'Mùi', range: '13:00 – 14:59' },
+        { name: 'Thân', range: '15:00 – 16:59' },
+        { name: 'Dậu', range: '17:00 – 18:59' },
+        { name: 'Tuất', range: '19:00 – 20:59' },
+        { name: 'Hợi', range: '21:00 – 22:59' }
+      ];
+
       let selectedProvinceIdx = 24; // Default: Ha Noi
-      let currentGroupMode = 'offset'; // Default mode per brief: "Theo độ lệch giờ"
+      let currentGroupMode = 'map'; // Default: Pixel Map of Vietnam
+      let mapColorLayer = 'canh';   // 'canh' (solar transition) | 'offset' (4 tiers)
+      let simMinutes = 1370;        // Default: 22:50 (Hoi -> Ty boundary)
+      let isPlaying = false;
+      let playTimer = null;
       let isMatrixInitialized = false;
       let flipTimeout = null;
+      let meridianLineEl = null;
+      let meridianTagEl = null;
+      let mapMetaEl = null;
+
+      function normalizeMinutes(m) {
+        return ((m % 1440) + 1440) % 1440;
+      }
+
+      function formatClock(totalMinutes) {
+        const norm = normalizeMinutes(totalMinutes);
+        const hh = Math.floor(norm / 60);
+        const mm = norm % 60;
+        return `${String(hh).padStart(2, '0')}:${String(mm).padStart(2, '0')}`;
+      }
+
+      function getCanhIndex(totalMinutes) {
+        const norm = normalizeMinutes(totalMinutes);
+        return Math.floor(((norm + 60) % 1440) / 120);
+      }
 
       function formatOffset(offset) {
         if (offset === 0) return '0 phút (trùng múi giờ UTC+7)';
         return (offset > 0 ? `+${offset}` : `${offset}`) + ' phút';
       }
 
-      function formatBoundaryExample(name, offset) {
-        const baseMin = 50 + offset;
-        let exampleHour = 22;
-        let finalMin = baseMin;
-        if (finalMin >= 60) {
-          exampleHour = 23;
-          finalMin -= 60;
-        } else if (finalMin < 0) {
-          exampleHour = 21;
-          finalMin += 60;
-        }
-        const timeStr = `${String(exampleHour).padStart(2, '0')}:${String(finalMin).padStart(2, '0')}`;
-        const canhanh = exampleHour >= 23 ? 'đã bước sang giờ Tý của ngày hôm sau' : 'vẫn nằm trong giờ Hợi';
-        return `Tại ${name} (${offset > 0 ? '+' : ''}${offset} phút), đồng hồ chỉ 22:50 tương ứng ${timeStr} Giờ Mặt Trời Thực — ${canhanh}.`;
+      function getOffsetColorClass(offset) {
+        if (offset >= 8) return 'cell-offset-g1';
+        if (offset >= 3) return 'cell-offset-g2';
+        if (offset >= -2) return 'cell-offset-g3';
+        return 'cell-offset-g4';
       }
 
-      // Group definitions
+      // Compute solar split across all 63 provinces for any clock minute
+      function analyzeSolarSplit(clockMinutes) {
+        const stdCanhIdx = getCanhIndex(clockMinutes);
+        const canhCounts = new Map();
+
+        PROVINCES.forEach((p) => {
+          const idx = getCanhIndex(clockMinutes + p.offset);
+          canhCounts.set(idx, (canhCounts.get(idx) || 0) + 1);
+        });
+
+        const presentIndices = Array.from(canhCounts.keys());
+        if (presentIndices.length === 1) {
+          return {
+            isSplit: false,
+            stdCanhIdx,
+            prevCanhIdx: presentIndices[0],
+            nextCanhIdx: presentIndices[0],
+            prevCount: 63,
+            nextCount: 0,
+            boundaryLon: null,
+            boundaryMinute: null,
+            neededOffset: null
+          };
+        }
+
+        // Exactly 2 consecutive canh gio exist (since max offset span is 25 min < 120 min)
+        let prevCanhIdx = presentIndices[0];
+        let nextCanhIdx = presentIndices[1];
+        if ((prevCanhIdx + 1) % 12 !== nextCanhIdx) {
+          const tmp = prevCanhIdx;
+          prevCanhIdx = nextCanhIdx;
+          nextCanhIdx = tmp;
+        }
+
+        // Exact boundary minute (odd hour) where nextCanhIdx starts
+        const boundaryHour = (nextCanhIdx * 2 + 23) % 24;
+        const boundaryMinute = boundaryHour * 60;
+        let diffToBoundary = boundaryMinute - normalizeMinutes(clockMinutes);
+        if (diffToBoundary > 720) diffToBoundary -= 1440;
+        if (diffToBoundary < -720) diffToBoundary += 1440;
+        const boundaryLon = 105 + diffToBoundary / 4;
+
+        return {
+          isSplit: true,
+          stdCanhIdx,
+          prevCanhIdx,
+          nextCanhIdx,
+          prevCount: canhCounts.get(prevCanhIdx) || 0,
+          nextCount: canhCounts.get(nextCanhIdx) || 0,
+          boundaryLon,
+          boundaryMinute,
+          neededOffset: diffToBoundary
+        };
+      }
+
+      // Strict non-overlapping solar-offset bands for mainland columns 1..9
+      const COL_OFFSET_BANDS = [
+        { col: 1, min: -8, max: -6 },
+        { col: 2, min: -4, max: -1 },
+        { col: 3, min:  0, max:  1 },
+        { col: 4, min:  2, max:  3 },
+        { col: 5, min:  4, max:  4 },
+        { col: 6, min:  5, max:  6 },
+        { col: 7, min:  7, max:  9 },
+        { col: 8, min: 10, max: 13 },
+        { col: 9, min: 14, max: 17 }
+      ];
+
+      function getMeridianColumnPos(neededOffset) {
+        let maxBlueCol = 0;
+        let minRedCol = 10;
+        for (const b of COL_OFFSET_BANDS) {
+          if (b.min < neededOffset) maxBlueCol = Math.max(maxBlueCol, b.col);
+          if (b.max >= neededOffset) minRedCol = Math.min(minRedCol, b.col);
+        }
+        // Clean boundary right on the seam between adjacent columns
+        if (maxBlueCol < minRedCol) {
+          return maxBlueCol;
+        }
+        // Boundary lies inside a single multi-offset column c
+        const band = COL_OFFSET_BANDS[maxBlueCol - 1];
+        const span = band.max - band.min + 1;
+        const frac = (neededOffset - band.min) / span;
+        return (band.col - 1) + Math.max(0.24, Math.min(0.76, frac));
+      }
+
+      function formatBoundaryExample(name, offset, clockMinutes) {
+        const rawSolar = clockMinutes + offset;
+        const clockStr = formatClock(clockMinutes);
+        const solarStr = formatClock(rawSolar);
+        const clockCanh = CANH_GIO[getCanhIndex(clockMinutes)].name;
+        const solarCanh = CANH_GIO[getCanhIndex(rawSolar)].name;
+
+        let relation;
+        if (solarCanh !== clockCanh) {
+          const crossedMidnight = normalizeMinutes(clockMinutes) < 1380 && normalizeMinutes(rawSolar) >= 1380;
+          if (crossedMidnight) {
+            relation = `đã bước sang giờ ${solarCanh} của ngày hôm sau (khác giờ ${clockCanh} trên đồng hồ)`;
+          } else if (offset > 0) {
+            relation = `đã sang giờ ${solarCanh} sớm hơn đồng hồ chuẩn (giờ ${clockCanh})`;
+          } else {
+            relation = `vẫn còn ở giờ ${solarCanh}, chậm hơn đồng hồ chuẩn (giờ ${clockCanh})`;
+          }
+        } else {
+          relation = `vẫn nằm trong giờ ${solarCanh}`;
+        }
+
+        return `Tại ${name} (${offset > 0 ? '+' : ''}${offset} phút), đồng hồ chỉ ${clockStr} tương ứng ${solarStr} Giờ Mặt Trời Thực — ${relation}.`;
+      }
+
+      // Group definitions for waffle views
       const GROUP_MODES = {
         offset: [
           {
@@ -2438,7 +3333,7 @@ const QA_SAMPLES = [
             color: '#5b3df5',
             colorClass: 'cell-reg-bac',
             filter: p => p.region === 'Bắc Bộ',
-            sort: null // keep dataset order
+            sort: null
           },
           {
             id: 'reg-trung',
@@ -2446,7 +3341,7 @@ const QA_SAMPLES = [
             color: '#c83e2b',
             colorClass: 'cell-reg-trung',
             filter: p => p.region === 'Trung Bộ' || p.region === 'Tây Nguyên',
-            sort: null // keep dataset order
+            sort: null
           },
           {
             id: 'reg-nam',
@@ -2454,7 +3349,7 @@ const QA_SAMPLES = [
             color: '#141413',
             colorClass: 'cell-reg-nam',
             filter: p => p.region === 'Nam Bộ',
-            sort: null // keep dataset order
+            sort: null
           }
         ],
         all: [
@@ -2464,22 +3359,39 @@ const QA_SAMPLES = [
             color: '#2b2b28',
             colorClass: 'cell-all',
             filter: () => true,
-            sort: null // keep dataset order
+            sort: null
           }
         ]
       };
 
-      // Create the single set of 63 cell DOM elements (no duplication across views)
+      function updateLivebarForProvince(idx, isPreview) {
+        const p = PROVINCES[idx];
+        const solarStr = formatClock(simMinutes + p.offset);
+        const solarCanh = CANH_GIO[getCanhIndex(simMinutes + p.offset)].name;
+        const prefix = isPreview ? 'Xem nhanh:' : 'Đang chọn:';
+        livebarText.textContent = `${prefix} ${p.name} (${p.region} · ${p.lon.toFixed(2)}°Đ · ${p.offset > 0 ? '+' : ''}${p.offset}p) — lúc ${formatClock(simMinutes)} = ${solarStr} (Giờ ${solarCanh}).`;
+      }
+
+      // Create the single set of 63 cell DOM elements (shared across Pixel Map & all waffle modes for FLIP)
       const provinceCells = PROVINCES.map((p, idx) => {
         const btn = document.createElement('button');
         btn.type = 'button';
         btn.className = 'waffle-cell';
         btn.dataset.idx = String(idx);
-        btn.setAttribute('aria-label', `${p.name}, ${p.region}, ${formatOffset(p.offset)}`);
-        btn.innerHTML = `<span>${p.code === 'HG2' ? 'HGi' : p.code}</span><span class="cell-sub">${p.offset > 0 ? '+' : ''}${p.offset}p</span>`;
+        const shortCode = p.code === 'HG2' ? 'HGi' : p.code;
+        btn.innerHTML = `<span class="cell-code">${shortCode}</span><span class="cell-sub">${p.offset > 0 ? '+' : ''}${p.offset}p</span>`;
 
         btn.addEventListener('click', () => {
           selectProvince(idx);
+        });
+        btn.addEventListener('mouseenter', () => {
+          updateLivebarForProvince(idx, true);
+        });
+        btn.addEventListener('focus', () => {
+          updateLivebarForProvince(idx, true);
+        });
+        btn.addEventListener('mouseleave', () => {
+          updateLivebarForProvince(selectedProvinceIdx, false);
         });
         return btn;
       });
@@ -2488,23 +3400,96 @@ const QA_SAMPLES = [
         selectedProvinceIdx = idx;
         provinceCells.forEach((c, i) => {
           c.classList.toggle('is-selected', i === idx);
+          c.setAttribute('aria-pressed', i === idx ? 'true' : 'false');
         });
         updateProvinceInspector();
+        updateLivebarForProvince(idx, false);
       }
 
       function updateProvinceInspector() {
         const p = PROVINCES[selectedProvinceIdx];
+        const clockStr = formatClock(simMinutes);
+        const solarStr = formatClock(simMinutes + p.offset);
+        const clockCanh = CANH_GIO[getCanhIndex(simMinutes)].name;
+        const solarCanh = CANH_GIO[getCanhIndex(simMinutes + p.offset)].name;
+        const shifted = solarCanh !== clockCanh;
+
         document.getElementById('prov-kicker').textContent = `ĐƠN VỊ ĐỊA LÝ · ${String(selectedProvinceIdx + 1).padStart(2, '0')} / 63`;
         document.getElementById('prov-name').textContent = p.name;
         document.getElementById('prov-region').textContent = p.region;
         document.getElementById('prov-region-tag').textContent = p.region;
         document.getElementById('prov-lon').textContent = `${p.lon.toFixed(2)}° Đ`;
         document.getElementById('prov-offset').textContent = formatOffset(p.offset);
-        document.getElementById('prov-example').textContent = formatBoundaryExample(p.name, p.offset);
+        document.getElementById('prov-solar-label').textContent = `Giờ Mặt Trời lúc ${clockStr}`;
+        document.getElementById('prov-solar-val').innerHTML = shifted
+          ? `${solarStr} · <span style="color:var(--accent-vermilion);">▸ Giờ ${solarCanh}</span> (đổi canh)`
+          : `${solarStr} · Giờ ${solarCanh}`;
+        document.getElementById('prov-example-title').textContent = `VÍ DỤ CHUYỂN CANH GIỜ (MỐC ${clockStr} ĐỒNG HỒ):`;
+        document.getElementById('prov-example').textContent = formatBoundaryExample(p.name, p.offset, simMinutes);
       }
 
-      function renderSummaryTable(mode, groups) {
+      function renderSummaryTable(mode, groups, splitInfo) {
         summaryTbody.innerHTML = '';
+
+        if (mode === 'map' && mapColorLayer === 'canh') {
+          summaryHeading.textContent = `Phân bố canh giờ lúc ${formatClock(simMinutes)} (UTC+7)`;
+          if (splitInfo.isSplit) {
+            const rows = [
+              {
+                label: `▸ Đã sang Giờ ${CANH_GIO[splitInfo.nextCanhIdx].name} (${CANH_GIO[splitInfo.nextCanhIdx].range})`,
+                color: '#c83e2b',
+                count: splitInfo.nextCount
+              },
+              {
+                label: `◦ Còn ở Giờ ${CANH_GIO[splitInfo.prevCanhIdx].name} (${CANH_GIO[splitInfo.prevCanhIdx].range})`,
+                color: '#1d4ed8',
+                count: splitInfo.prevCount
+              }
+            ];
+            rows.forEach(r => {
+              const pct = ((r.count / 63) * 100).toFixed(1);
+              const tr = document.createElement('tr');
+              tr.innerHTML = `
+                <td>
+                  <div class="table-group-cell">
+                    <span class="table-group-dot" style="background:${r.color};"></span>
+                    <span>${r.label}</span>
+                  </div>
+                </td>
+                <td style="text-align:right;font-family:var(--font-mono);font-weight:700;font-variant-numeric:tabular-nums;">${r.count}</td>
+                <td style="text-align:right;font-family:var(--font-mono);font-variant-numeric:tabular-nums;">${pct}%</td>
+              `;
+              summaryTbody.appendChild(tr);
+            });
+            const totalTr = document.createElement('tr');
+            totalTr.className = 'summary-total-row';
+            totalTr.innerHTML = `
+              <td><strong>Tổng cộng (phân tách 2 canh giờ)</strong></td>
+              <td style="text-align:right;font-family:var(--font-mono);font-variant-numeric:tabular-nums;">63</td>
+              <td style="text-align:right;font-family:var(--font-mono);font-variant-numeric:tabular-nums;">100.0%</td>
+            `;
+            summaryTbody.appendChild(totalTr);
+          } else {
+            const canhObj = CANH_GIO[splitInfo.prevCanhIdx];
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+              <td>
+                <div class="table-group-cell">
+                  <span class="table-group-dot" style="background:#2f2d4f;"></span>
+                  <span>● Toàn quốc cùng nằm trong Giờ ${canhObj.name} (${canhObj.range})</span>
+                </div>
+              </td>
+              <td style="text-align:right;font-family:var(--font-mono);font-weight:700;font-variant-numeric:tabular-nums;">63</td>
+              <td style="text-align:right;font-family:var(--font-mono);font-weight:700;font-variant-numeric:tabular-nums;">100.0%</td>
+            `;
+            summaryTbody.appendChild(tr);
+          }
+          return;
+        }
+
+        summaryHeading.textContent = 'Nhóm phân loại';
+        const activeGroups = mode === 'map' ? GROUP_MODES.offset : groups;
+
         if (mode === 'all') {
           const tr = document.createElement('tr');
           tr.innerHTML = `
@@ -2514,15 +3499,15 @@ const QA_SAMPLES = [
                 <strong>Toàn bộ 63 tỉnh/thành</strong>
               </div>
             </td>
-            <td style="text-align:right;font-family:var(--font-mono);font-weight:700;">63</td>
-            <td style="text-align:right;font-family:var(--font-mono);font-weight:700;">100.0%</td>
+            <td style="text-align:right;font-family:var(--font-mono);font-weight:700;font-variant-numeric:tabular-nums;">63</td>
+            <td style="text-align:right;font-family:var(--font-mono);font-weight:700;font-variant-numeric:tabular-nums;">100.0%</td>
           `;
           summaryTbody.appendChild(tr);
           return;
         }
 
         let totalCount = 0;
-        groups.forEach(g => {
+        activeGroups.forEach(g => {
           const count = PROVINCES.filter(g.filter).length;
           totalCount += count;
           const pct = ((count / 63) * 100).toFixed(1);
@@ -2534,27 +3519,311 @@ const QA_SAMPLES = [
                 <span>${g.name}</span>
               </div>
             </td>
-            <td style="text-align:right;font-family:var(--font-mono);font-weight:700;">${count}</td>
-            <td style="text-align:right;font-family:var(--font-mono);">${pct}%</td>
+            <td style="text-align:right;font-family:var(--font-mono);font-weight:700;font-variant-numeric:tabular-nums;">${count}</td>
+            <td style="text-align:right;font-family:var(--font-mono);font-variant-numeric:tabular-nums;">${pct}%</td>
           `;
           summaryTbody.appendChild(tr);
         });
 
-        // Total row
         const totalTr = document.createElement('tr');
         totalTr.className = 'summary-total-row';
         totalTr.innerHTML = `
           <td><strong>Tổng cộng</strong></td>
-          <td style="text-align:right;font-family:var(--font-mono);">${totalCount}</td>
-          <td style="text-align:right;font-family:var(--font-mono);">100.0%</td>
+          <td style="text-align:right;font-family:var(--font-mono);font-variant-numeric:tabular-nums;">${totalCount}</td>
+          <td style="text-align:right;font-family:var(--font-mono);font-variant-numeric:tabular-nums;">100.0%</td>
         `;
         summaryTbody.appendChild(totalTr);
       }
 
+      function updatePixelMapVisuals() {
+        const splitInfo = analyzeSolarSplit(simMinutes);
+        const clockStr = formatClock(simMinutes);
+        const stdCanhName = CANH_GIO[splitInfo.stdCanhIdx].name;
+
+        // Update simulator clock readout
+        simClockDisplay.textContent = clockStr;
+        simClockCanh.textContent = `Giờ đồng hồ UTC+7 (105°Đ) · Giờ ${stdCanhName}`;
+        if (String(simSlider.value) !== String(simMinutes)) {
+          simSlider.value = String(simMinutes);
+        }
+
+        // Sync preset active state
+        presetBtns.forEach(btn => {
+          const presetVal = Number(btn.getAttribute('data-sim-preset'));
+          btn.classList.toggle('is-active', presetVal === simMinutes);
+        });
+
+        // Update map header meta
+        if (mapMetaEl) {
+          mapMetaEl.textContent = mapColorLayer === 'canh'
+            ? (splitInfo.isSplit
+              ? `Mốc ${clockStr} · Ranh ${splitInfo.boundaryLon.toFixed(1)}°Đ`
+              : `Mốc ${clockStr} · Đồng nhất Giờ ${stdCanhName}`)
+            : 'Chênh lệch Đông–Tây: −8p → +17p';
+        }
+
+        // Update meridian sweep line on pixel map (strictly aligned with column offset bands)
+        if (meridianLineEl && meridianTagEl) {
+          if (currentGroupMode === 'map' && mapColorLayer === 'canh' && splitInfo.isSplit) {
+            const colPos = getMeridianColumnPos(splitInfo.neededOffset);
+            const ratio = colPos / 11;
+            meridianLineEl.style.left = `calc(6px + (100% - 12px) * ${ratio.toFixed(5)})`;
+            meridianTagEl.textContent = `${splitInfo.boundaryLon.toFixed(1)}°Đ`;
+            meridianLineEl.classList.add('is-visible');
+          } else {
+            meridianLineEl.classList.remove('is-visible');
+          }
+        }
+
+        // Update 63 cells styling & labels when in map mode
+        if (currentGroupMode === 'map') {
+          PROVINCES.forEach((p, idx) => {
+            const cell = provinceCells[idx];
+            const pCanhIdx = getCanhIndex(simMinutes + p.offset);
+            const shortCode = p.code === 'HG2' ? 'HGi' : p.code;
+            const subEl = cell.querySelector('.cell-sub');
+
+            let colorClass;
+            if (mapColorLayer === 'offset') {
+              colorClass = getOffsetColorClass(p.offset);
+              if (subEl) subEl.textContent = `${p.offset > 0 ? '+' : ''}${p.offset}p`;
+            } else if (!splitInfo.isSplit) {
+              colorClass = 'cell-canh-same';
+              if (subEl) subEl.textContent = `${p.offset > 0 ? '+' : ''}${p.offset}p`;
+            } else if (pCanhIdx === splitInfo.nextCanhIdx) {
+              colorClass = 'cell-canh-next';
+              if (subEl) subEl.textContent = `▸${CANH_GIO[pCanhIdx].name}`;
+            } else {
+              colorClass = 'cell-canh-prev';
+              if (subEl) subEl.textContent = `◦${CANH_GIO[pCanhIdx].name}`;
+            }
+
+            cell.className = `waffle-cell ${colorClass}${idx === selectedProvinceIdx ? ' is-selected' : ''}`;
+            cell.setAttribute(
+              'aria-label',
+              `${p.name}, ${p.region}, ${formatOffset(p.offset)}, lúc ${clockStr} là ${formatClock(simMinutes + p.offset)} giờ ${CANH_GIO[pCanhIdx].name}`
+            );
+          });
+        }
+
+        // Update split meter & legend in simulator deck
+        if (mapColorLayer === 'canh') {
+          if (splitInfo.isSplit) {
+            const nextPct = ((splitInfo.nextCount / 63) * 100).toFixed(1);
+            const prevPct = ((splitInfo.prevCount / 63) * 100).toFixed(1);
+            const nextName = CANH_GIO[splitInfo.nextCanhIdx].name;
+            const prevName = CANH_GIO[splitInfo.prevCanhIdx].name;
+
+            splitBarEl.innerHTML = `
+              <div class="solar-split-seg is-next" style="width:${nextPct}%;"></div>
+              <div class="solar-split-seg is-prev" style="width:${prevPct}%;"></div>
+            `;
+            splitLegendEl.innerHTML = `
+              <div class="solar-legend-item">
+                <span class="solar-legend-left"><span class="solar-swatch" style="background:#c83e2b;"></span>▸ Đã sang Giờ ${nextName}</span>
+                <strong>${splitInfo.nextCount} tỉnh (${nextPct}%)</strong>
+              </div>
+              <div class="solar-legend-item">
+                <span class="solar-legend-left"><span class="solar-swatch" style="background:#1d4ed8;"></span>◦ Còn ở Giờ ${prevName}</span>
+                <strong>${splitInfo.prevCount} tỉnh (${prevPct}%)</strong>
+              </div>
+            `;
+            splitNoteEl.textContent = `Ranh giới đổi canh đang đi qua kinh tuyến ~${splitInfo.boundaryLon.toFixed(1)}°Đ: các tỉnh phía Đông đã sang Giờ ${nextName}, trong khi phía Tây vẫn ở Giờ ${prevName}.`;
+          } else {
+            const sameName = CANH_GIO[splitInfo.prevCanhIdx].name;
+            splitBarEl.innerHTML = `<div class="solar-split-seg is-same" style="width:100%;"></div>`;
+            splitLegendEl.innerHTML = `
+              <div class="solar-legend-item">
+                <span class="solar-legend-left"><span class="solar-swatch" style="background:#2f2d4f;"></span>● Toàn quốc cùng Giờ ${sameName}</span>
+                <strong>63 tỉnh (100%)</strong>
+              </div>
+            `;
+            splitNoteEl.textContent = `Tại ${clockStr}, cả 63 tỉnh chưa chạm ranh đổi canh. Kéo thanh giờ về sát các mốc giờ lẻ (:43–:08) hoặc bấm mốc nhanh phía trên để thấy ranh giới quét qua bản đồ.`;
+          }
+        } else {
+          // Offset heatmap legend inside split box
+          const counts = GROUP_MODES.offset.map(g => ({
+            name: g.name,
+            color: g.color,
+            count: PROVINCES.filter(g.filter).length
+          }));
+          splitBarEl.innerHTML = counts
+            .map(c => `<div class="solar-split-seg" style="width:${((c.count / 63) * 100).toFixed(1)}%;background:${c.color};"></div>`)
+            .join('');
+          splitLegendEl.innerHTML = counts
+            .map(c => `
+              <div class="solar-legend-item">
+                <span class="solar-legend-left"><span class="solar-swatch" style="background:${c.color};"></span>${c.name}</span>
+                <strong>${c.count} tỉnh</strong>
+              </div>
+            `)
+            .join('');
+          splitNoteEl.textContent = 'Độ lệch tăng dần từ Tây Bắc (Điện Biên −8 phút) sang Duyên hải Nam Trung Bộ (Phú Yên, Bình Định, Khánh Hòa +17 phút).';
+        }
+
+        // Keep Inspector, Livebar & Summary Table synchronized
+        updateProvinceInspector();
+        updateLivebarForProvince(selectedProvinceIdx, false);
+        if (currentGroupMode === 'map') {
+          renderSummaryTable('map', null, splitInfo);
+        }
+      }
+
+      function stopSimulation() {
+        isPlaying = false;
+        if (playTimer) {
+          clearInterval(playTimer);
+          playTimer = null;
+        }
+        simPlayBtn.classList.remove('is-playing');
+        simPlayBtn.setAttribute('aria-pressed', 'false');
+        simPlayBtn.textContent = '▶ Chạy quét';
+      }
+
+      function startSimulation() {
+        const isReducedMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        // Jump into nearest odd-hour transition window if currently far from any boundary
+        const splitCheck = analyzeSolarSplit(simMinutes);
+        if (!splitCheck.isSplit) {
+          simMinutes = 1362; // 22:42 right before Hoi -> Ty wave starts at +17p
+        }
+        if (mapColorLayer !== 'canh') {
+          setMapColorLayer('canh');
+        }
+
+        // Determine active boundary sweep window [boundary - 18m .. boundary + 10m]
+        const refSplit = analyzeSolarSplit(simMinutes);
+        const centerBoundary = refSplit.boundaryMinute !== null ? refSplit.boundaryMinute : 1380;
+        const startMin = normalizeMinutes(centerBoundary - 18);
+        let stepOffset = normalizeMinutes(simMinutes - startMin);
+        if (stepOffset > 28) stepOffset = 0;
+
+        isPlaying = true;
+        simPlayBtn.classList.add('is-playing');
+        simPlayBtn.setAttribute('aria-pressed', 'true');
+        simPlayBtn.textContent = '❚❚ Tạm dừng';
+
+        const intervalMs = isReducedMotion ? 500 : 220;
+        playTimer = setInterval(() => {
+          stepOffset = (stepOffset + 1) % 30; // 30-minute sweep across all 63 provinces
+          simMinutes = normalizeMinutes(startMin + stepOffset);
+          updatePixelMapVisuals();
+        }, intervalMs);
+      }
+
+      function setMapColorLayer(layer) {
+        mapColorLayer = layer;
+        layerBtns.forEach(btn => {
+          const active = btn.getAttribute('data-map-layer') === layer;
+          btn.classList.toggle('is-active', active);
+          btn.setAttribute('aria-pressed', active ? 'true' : 'false');
+        });
+        updatePixelMapVisuals();
+      }
+
+      function buildPixelMapDOM() {
+        const stage = document.createElement('div');
+        stage.className = 'pixel-map-stage';
+
+        const header = document.createElement('div');
+        header.className = 'pixel-map-header';
+        header.innerHTML = `
+          <span class="pixel-map-title">BẢN ĐỒ PIXEL 63 TỈNH/THÀNH VIỆT NAM</span>
+          <span class="pixel-map-meta" id="pixel-map-meta"></span>
+        `;
+        mapMetaEl = header.querySelector('#pixel-map-meta');
+
+        const ruler = document.createElement('div');
+        ruler.className = 'pixel-map-ruler';
+        ruler.setAttribute('aria-hidden', 'true');
+        const rulerLabels = ['103°', '104°', '105°', '105.6', '106°', '106.4', '107°', '108°', '109°', '112°', '114°'];
+        rulerLabels.forEach(lbl => {
+          const sp = document.createElement('span');
+          sp.textContent = lbl;
+          ruler.appendChild(sp);
+        });
+
+        const canvas = document.createElement('div');
+        canvas.className = 'pixel-map-canvas';
+
+        const grid = document.createElement('div');
+        grid.className = 'pixel-map-grid';
+
+        // East Sea label + Hoang Sa & Truong Sa markers
+        const seaLabel = document.createElement('div');
+        seaLabel.className = 'pixel-sea-label';
+        seaLabel.setAttribute('aria-hidden', 'true');
+        seaLabel.innerHTML = '<span>BIỂN</span><span>ĐÔNG</span>';
+        grid.appendChild(seaLabel);
+
+        const hoangSa = document.createElement('div');
+        hoangSa.className = 'pixel-archipelago is-hoangsa';
+        hoangSa.setAttribute('aria-label', 'Quần đảo Hoàng Sa (TP. Đà Nẵng)');
+        hoangSa.innerHTML = `
+          <div class="archipelago-dots" aria-hidden="true">
+            <i></i><i class="is-empty"></i><i></i>
+            <i class="is-empty"></i><i></i><i class="is-empty"></i>
+          </div>
+          <span class="archipelago-name">Hoàng Sa</span>
+          <span class="archipelago-lon">~112°Đ</span>
+        `;
+        grid.appendChild(hoangSa);
+
+        const truongSa = document.createElement('div');
+        truongSa.className = 'pixel-archipelago is-truongsa';
+        truongSa.setAttribute('aria-label', 'Quần đảo Trường Sa (Tỉnh Khánh Hòa)');
+        truongSa.innerHTML = `
+          <div class="archipelago-dots" aria-hidden="true">
+            <i class="is-empty"></i><i></i><i class="is-empty"></i>
+            <i></i><i class="is-empty"></i><i></i>
+          </div>
+          <span class="archipelago-name">Trường Sa</span>
+          <span class="archipelago-lon">~114°Đ</span>
+        `;
+        grid.appendChild(truongSa);
+
+        // Place all 63 province cells at their exact geographic (gx, gy) coordinates
+        PROVINCES.forEach((p, idx) => {
+          const cell = provinceCells[idx];
+          cell.style.gridColumn = String(p.gx);
+          cell.style.gridRow = String(p.gy);
+          grid.appendChild(cell);
+        });
+
+        meridianLineEl = document.createElement('div');
+        meridianLineEl.className = 'pixel-meridian-line';
+        meridianLineEl.setAttribute('aria-hidden', 'true');
+        meridianTagEl = document.createElement('span');
+        meridianTagEl.className = 'pixel-meridian-tag';
+        meridianLineEl.appendChild(meridianTagEl);
+
+        canvas.appendChild(grid);
+        canvas.appendChild(meridianLineEl);
+
+        const footer = document.createElement('div');
+        footer.className = 'pixel-map-footer';
+        footer.innerHTML = `
+          <span>← Tây (−8p Điện Biên)</span>
+          <span>Đông (+17p Phú Yên) →</span>
+        `;
+
+        stage.appendChild(header);
+        stage.appendChild(ruler);
+        stage.appendChild(canvas);
+        stage.appendChild(footer);
+        return stage;
+      }
+
       function renderMatrixWithFLIP(targetMode) {
         const isReducedMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-        
-        // 1. FIRST: Measure current cell positions if animating
+        const prevMode = currentGroupMode;
+        const isMapCrossTransition = isMatrixInitialized && (prevMode === 'map' || targetMode === 'map') && prevMode !== targetMode;
+
+        if (targetMode !== 'map' && isPlaying) {
+          stopSimulation();
+        }
+
+        // 1. FIRST: Measure current cell rects if animating
         const firstRects = new Map();
         if (!isReducedMotion && isMatrixInitialized) {
           if (flipTimeout) {
@@ -2568,78 +3837,114 @@ const QA_SAMPLES = [
 
         // 2. DOM REARRANGEMENT
         currentGroupMode = targetMode;
+        stageLayout.classList.toggle('is-map-mode', targetMode === 'map');
 
-        // Update mode buttons
         modeBtns.forEach(btn => {
           const isActive = btn.getAttribute('data-group-mode') === targetMode;
           btn.classList.toggle('is-active', isActive);
           btn.setAttribute('aria-selected', isActive ? 'true' : 'false');
         });
 
-        const groups = GROUP_MODES[targetMode];
         waffle63.innerHTML = '';
 
-        groups.forEach(g => {
-          const block = document.createElement('div');
-          block.className = 'matrix-group-block';
-
-          // Filter matching provinces
-          const matched = PROVINCES
-            .map((p, idx) => ({ ...p, originalIdx: idx }))
-            .filter(g.filter);
-
-          if (g.sort) {
-            matched.sort(g.sort);
+        if (targetMode === 'map') {
+          const mapStage = buildPixelMapDOM();
+          if (isMapCrossTransition && !isReducedMotion) {
+            mapStage.classList.add('matrix-fade-enter');
           }
+          waffle63.appendChild(mapStage);
+          updatePixelMapVisuals();
+        } else {
+          meridianLineEl = null;
+          meridianTagEl = null;
+          mapMetaEl = null;
+          const groups = GROUP_MODES[targetMode];
 
-          const count = matched.length;
-          const pct = ((count / 63) * 100).toFixed(1);
+          groups.forEach(g => {
+            const block = document.createElement('div');
+            block.className = 'matrix-group-block';
 
-          const header = document.createElement('div');
-          header.className = 'matrix-group-header';
-          header.innerHTML = `
-            <span class="matrix-group-dot" style="background:${g.color};"></span>
-            <span class="matrix-group-title-text">${g.name} · ${count} (${pct}%)</span>
-          `;
+            const matched = PROVINCES
+              .map((p, idx) => ({ ...p, originalIdx: idx }))
+              .filter(g.filter);
 
-          const cellsWrap = document.createElement('div');
-          cellsWrap.className = 'matrix-group-cells';
+            if (g.sort) {
+              matched.sort(g.sort);
+            }
 
-          matched.forEach(item => {
-            const cell = provinceCells[item.originalIdx];
-            cell.className = `waffle-cell ${g.colorClass}${item.originalIdx === selectedProvinceIdx ? ' is-selected' : ''}`;
-            cellsWrap.appendChild(cell);
+            const count = matched.length;
+            const pct = ((count / 63) * 100).toFixed(1);
+
+            const header = document.createElement('div');
+            header.className = 'matrix-group-header';
+            if (isMapCrossTransition && !isReducedMotion) {
+              header.classList.add('matrix-fade-enter');
+            }
+            header.innerHTML = `
+              <span class="matrix-group-dot" style="background:${g.color};"></span>
+              <span class="matrix-group-title-text">${g.name} · ${count} (${pct}%)</span>
+            `;
+
+            const cellsWrap = document.createElement('div');
+            cellsWrap.className = 'matrix-group-cells';
+
+            matched.forEach(item => {
+              const cell = provinceCells[item.originalIdx];
+              cell.style.gridColumn = '';
+              cell.style.gridRow = '';
+              const subEl = cell.querySelector('.cell-sub');
+              if (subEl) subEl.textContent = `${item.offset > 0 ? '+' : ''}${item.offset}p`;
+              cell.className = `waffle-cell ${g.colorClass}${item.originalIdx === selectedProvinceIdx ? ' is-selected' : ''}`;
+              cellsWrap.appendChild(cell);
+            });
+
+            block.appendChild(header);
+            block.appendChild(cellsWrap);
+            waffle63.appendChild(block);
           });
 
-          block.appendChild(header);
-          block.appendChild(cellsWrap);
-          waffle63.appendChild(block);
-        });
+          renderSummaryTable(targetMode, groups, null);
+        }
 
-        // Update Summary Table
-        renderSummaryTable(targetMode, groups);
-
-        // 3. LAST, INVERT, PLAY (FLIP)
+        // 3. LAST, INVERT, PLAY (FLIP + Subtle Fade-In when crossing Map <-> Matrix modes)
         if (!isReducedMotion && isMatrixInitialized) {
-          provinceCells.forEach(cell => {
+          provinceCells.forEach((cell) => {
             const first = firstRects.get(cell);
-            if (!first) return;
-            const last = cell.getBoundingClientRect();
-            const dx = first.left - last.left;
-            const dy = first.top - last.top;
+            cell.style.transition = 'none';
 
-            if (dx !== 0 || dy !== 0) {
-              cell.style.transition = 'none';
-              cell.style.transform = `translate(${dx}px, ${dy}px)`;
+            if (first && first.width > 0) {
+              const last = cell.getBoundingClientRect();
+              const dx = first.left - last.left;
+              const dy = first.top - last.top;
+              const sx = last.width > 0 ? first.width / last.width : 1;
+              const sy = last.height > 0 ? first.height / last.height : 1;
+
+              if (dx !== 0 || dy !== 0 || Math.abs(sx - 1) > 0.02) {
+                cell.style.transformOrigin = 'top left';
+                cell.style.transform = `translate(${dx}px, ${dy}px) scale(${sx}, ${sy})`;
+              }
+            }
+
+            if (isMapCrossTransition) {
+              cell.style.opacity = '0.16';
             }
           });
 
-          // Force reflow
+          // Force reflow so initial transform & opacity states commit before playing
           waffle63.offsetHeight;
 
-          // Play transition to target position (duration ~600ms, smooth cubic-bezier)
-          provinceCells.forEach(cell => {
-            cell.style.transition = 'transform 600ms cubic-bezier(0.2, 0.8, 0.2, 1), background-color 400ms ease, color 400ms ease';
+          provinceCells.forEach((cell, idx) => {
+            if (isMapCrossTransition) {
+              // Subtle North-to-South stagger entering Map, or gentle sequential stagger leaving Map
+              const staggerMs = targetMode === 'map'
+                ? Math.min((PROVINCES[idx].gy - 1) * 7, 130)
+                : Math.min(idx * 2, 120);
+              cell.style.transition = `transform 580ms cubic-bezier(0.2, 0.8, 0.2, 1), opacity 360ms cubic-bezier(0.16, 1, 0.3, 1) ${staggerMs}ms, background-color 350ms ease, color 350ms ease`;
+              cell.style.opacity = '1';
+            } else {
+              cell.style.transition = 'transform 580ms cubic-bezier(0.2, 0.8, 0.2, 1), background-color 350ms ease, color 350ms ease';
+              cell.style.opacity = '';
+            }
             cell.style.transform = '';
           });
 
@@ -2647,21 +3952,65 @@ const QA_SAMPLES = [
             provinceCells.forEach(cell => {
               cell.style.transition = '';
               cell.style.transform = '';
+              cell.style.transformOrigin = '';
+              cell.style.opacity = '';
             });
             flipTimeout = null;
-          }, 650);
+          }, isMapCrossTransition ? 640 : 620);
+        } else {
+          provinceCells.forEach(cell => {
+            cell.style.transition = '';
+            cell.style.transform = '';
+            cell.style.transformOrigin = '';
+            cell.style.opacity = '';
+          });
         }
 
         isMatrixInitialized = true;
       }
 
-      // Attach event listeners to mode buttons
+      // Attach event listeners to mode buttons, slider, presets, play, and layer switch
       modeBtns.forEach(btn => {
         btn.addEventListener('click', () => {
           const mode = btn.getAttribute('data-group-mode');
           if (mode === currentGroupMode) return;
           renderMatrixWithFLIP(mode);
         });
+      });
+
+      layerBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+          const layer = btn.getAttribute('data-map-layer');
+          if (layer === mapColorLayer) return;
+          if (layer === 'offset' && isPlaying) stopSimulation();
+          setMapColorLayer(layer);
+        });
+      });
+
+      simSlider.addEventListener('input', () => {
+        if (isPlaying) stopSimulation();
+        simMinutes = Number(simSlider.value);
+        updatePixelMapVisuals();
+      });
+
+      presetBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+          if (isPlaying) stopSimulation();
+          simMinutes = Number(btn.getAttribute('data-sim-preset'));
+          if (mapColorLayer !== 'canh') {
+            setMapColorLayer('canh');
+          } else {
+            updatePixelMapVisuals();
+          }
+        });
+      });
+
+      simPlayBtn.addEventListener('click', () => {
+        if (isPlaying) {
+          stopSimulation();
+        } else {
+          startSimulation();
+        }
       });
 
       // 3. Setup 12 Palaces Wheel
@@ -2862,7 +4211,7 @@ const QA_SAMPLES = [
       });
 
       // Initial Calls
-      renderMatrixWithFLIP('offset');
+      renderMatrixWithFLIP('map');
       updateProvinceInspector();
       renderTopics();
       updateTopicInspector();
