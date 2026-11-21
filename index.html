@@ -995,6 +995,83 @@
       color: var(--ink);
     }
 
+    .corpus-head {
+      grid-column: 1 / -1;
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 16px;
+      border-bottom: 2px solid var(--ink);
+      padding-bottom: 12px;
+    }
+    .corpus-kicker {
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      color: var(--accent-cobalt);
+    }
+    .corpus-docid {
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      color: var(--ink-muted);
+      white-space: nowrap;
+    }
+    .corpus-title {
+      grid-column: 1 / -1;
+      font-family: var(--font-display);
+      font-size: 1.45rem;
+      font-weight: 900;
+      line-height: 1.25;
+      margin-top: -10px;
+    }
+    .corpus-cite {
+      margin-top: 18px;
+      background: var(--accent-cobalt-light);
+      border-left: 4px solid var(--accent-cobalt);
+      border-radius: 0 8px 8px 0;
+      padding: 12px 16px;
+      font-size: 0.85rem;
+      line-height: 1.55;
+      color: var(--ink);
+    }
+    .corpus-cite .cite-label {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      color: var(--accent-cobalt);
+      display: block;
+      margin-bottom: 4px;
+    }
+    .specs-num {
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      font-weight: 600;
+      color: var(--ink-muted);
+      margin-right: 8px;
+    }
+    .corpus-card .inspector-specs-table td {
+      text-align: right;
+      font-variant-numeric: tabular-nums;
+    }
+    .corpus-card .inspector-specs-table tr:last-child th,
+    .corpus-card .inspector-specs-table tr:last-child td {
+      border-bottom: none;
+    }
+    .corpus-foot {
+      grid-column: 1 / -1;
+      border-top: 1px dashed rgba(20, 20, 19, 0.18);
+      padding-top: 12px;
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      color: var(--ink-muted);
+      display: flex;
+      justify-content: space-between;
+      gap: 8px 16px;
+      flex-wrap: wrap;
+    }
+
     /* Section 005: FAQ & Closing CTA */
     .faq-toolbar {
       display: flex;
@@ -2922,45 +2999,58 @@
       </div>
 
       <div class="corpus-card">
+        <div class="corpus-head">
+          <span class="corpus-kicker">HỒ SƠ KỸ THUẬT NGỮ LIỆU</span>
+          <span class="corpus-docid">DOC. 004-A · CORPUS V4.0</span>
+        </div>
+        <h3 class="corpus-title">Nền tảng dữ liệu nguồn mở &amp; đối chiếu cổ văn</h3>
         <div class="corpus-prose">
-          <h3 style="font-family:var(--font-display);font-size:1.25rem;font-weight:800;margin-bottom:12px;">Nền tảng dữ liệu nguồn mở &amp; đối chiếu cổ văn</h3>
           <p>
-            Hệ thống được vận hành trên kho dữ liệu gốc <strong>56 GB</strong> cùng bộ luận giải Tử Vi Đẩu Số mã nguồn mở <strong>v4.0 của Vương Đa Ngư (王多鱼AI)</strong> — hơn <strong>193.000 đoạn</strong> bao phủ 77 năm sinh (1930–2006) theo giấy phép <strong>CC BY 4.0</strong>, đã dịch tự động sang tiếng Việt và đang trong quá trình nghiệm thu.
+            Hệ thống vận hành trên bộ dữ liệu Tử Vi Đẩu Số mã nguồn mở <strong>v4.0</strong> của <strong>Vương Đa Ngư (王多鱼AI)</strong> — <strong>193.446 đoạn</strong> luận giải bao phủ 77 năm sinh (1930–2006), dung lượng kho gốc <strong>56 GB</strong>, phát hành theo giấy phép <strong>CC BY 4.0</strong>. Ngữ liệu đã dịch tự động sang tiếng Việt và đang trong quá trình nghiệm thu.
           </p>
           <p>
-            Đồng thời, toàn bộ cấu trúc luận giải và câu trả lời AI được đối chiếu chuẩn xác với nguồn cổ văn kinh điển và hệ thống kiến thức <strong>Thiên Kỷ</strong> của thầy Nghê Hải Hạ, bảo đảm bám sát cung vị, tứ hóa và đại vận thực tế của từng lá số.
+            Lớp luận giải theo hệ thống <strong>Thiên Kỷ</strong> của thầy <strong>Nghê Hải Hạ</strong> được tích hợp dưới dạng trích dẫn có ghi nguồn, tách bạch với dữ liệu mở. Mọi câu trả lời AI đều truy xuất (retrieval) trực tiếp từ kho ngữ liệu theo đúng cung vị, tứ hóa và đại vận của lá số đang xem.
           </p>
+          <div class="corpus-cite">
+            <span class="cite-label">TRÍCH DẪN NGUỔN</span>
+            紫微斗数开源解读数据集 v4.0 — 王多鱼AI (Vương Đa Ngư) · Giấy phép CC BY 4.0<br>
+            Trích dẫn Nghê Hải Hạ (倪海厦) — CC BY-NC-SA · chỉ hiển thị miễn phí
+          </div>
         </div>
         <div>
-          <h4 style="font-family:var(--font-mono);font-size:0.82rem;font-weight:700;margin-bottom:12px;color:var(--accent-cobalt);">HỒ SƠ KỸ THUẬT NGỮ LIỆU</h4>
           <table class="inspector-specs-table">
             <tbody>
               <tr>
-                <th>Dung lượng kho gốc</th>
+                <th><span class="specs-num">01</span>Dung lượng kho gốc</th>
                 <td>56 GB</td>
               </tr>
               <tr>
-                <th>Bộ luận giải mở (v4.0)</th>
-                <td>193.000+ đoạn</td>
+                <th><span class="specs-num">02</span>Đoạn luận giải (v4.0)</th>
+                <td>193.446 đoạn</td>
               </tr>
               <tr>
-                <th>Phạm vi năm sinh mẫu</th>
+                <th><span class="specs-num">03</span>Lá số trong kho mẫu</th>
+                <td>674.976 lá số</td>
+              </tr>
+              <tr>
+                <th><span class="specs-num">04</span>Phạm vi năm sinh mẫu</th>
                 <td>1930 – 2006 (77 năm)</td>
               </tr>
               <tr>
-                <th>Lịch chuyển đổi Âm–Dương</th>
+                <th><span class="specs-num">05</span>Lịch chuyển đổi Âm–Dương</th>
                 <td>1900 – 2050 (VN)</td>
               </tr>
               <tr>
-                <th>Giấy phép dữ liệu</th>
+                <th><span class="specs-num">06</span>Giấy phép dữ liệu</th>
                 <td>CC BY 4.0</td>
               </tr>
             </tbody>
           </table>
         </div>
-      </div>
-      <div class="section-source-note">
-        Nguồn: Tử Vi Thiên Kỷ Technical Specifications · Corpus v4.0 (CC BY 4.0)
+        <div class="corpus-foot">
+          <span>Số liệu đo trực tiếp từ kho dữ liệu production của hệ thống.</span>
+          <span>Cập nhật: 21/11/2026</span>
+        </div>
       </div>
     </section>
 
